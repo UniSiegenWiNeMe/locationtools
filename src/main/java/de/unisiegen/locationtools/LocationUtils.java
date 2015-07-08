@@ -132,8 +132,32 @@ public final class LocationUtils
 			xr.parse(new InputSource(new StringReader(xml)));
 			//Log.d("PTEnabler", "Imported " + myXMLHandler.items.size() + " Locations");
 			return myXMLHandler.items;
+	}
 
+	public void saveToDB(HashMap<Long,Location> locationsMap) {
+		InfluxDB influxDB = InfluxDBFactory.connect("http://localhost");
+		String dbName = "locations";
+		influxDB.createDatabase(dbName);
+		BatchPoints batchPoints = BatchPoints
+				.database(dbName)
+				.tag("async", "true")
+				.retentionPolicy("default")
+				.consistency(ConsistencyLevel.ALL)
+				.build();
 
+		//loop
 
+		Point point1 = Point.measurement("cpu")
+				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+				.field("idle", 90L).field("user", 9L)
+				.field("system", 1L)
+				.build();
+
+		batchPoints.point(point1);
+		batchPoints.point(point2);
+		influxDB.write(batchPoints);
+		Query query = new Query("SELECT idle FROM cpu", dbName);
+		influxDB.query(query);
+		influxDB.deleteDatabase(dbName)
 	}
 }
