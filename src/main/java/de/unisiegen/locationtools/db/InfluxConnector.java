@@ -66,7 +66,7 @@ public class InfluxConnector implements DataAdapter {
 
         for (Map.Entry<Long, Location> entry : locations.entrySet())
         {
-            Point point1 = Point.measurement("rofl")
+            Point point1 = Point.measurement("Loci")
                     .time(entry.getKey(), TimeUnit.MILLISECONDS)
                     .field("lat", entry.getValue().lat).field("long", entry.getValue().lon).tag("namespace", namespace).tag("user", user)
                     .build();
