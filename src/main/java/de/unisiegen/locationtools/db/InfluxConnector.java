@@ -28,29 +28,32 @@ public class InfluxConnector implements DataAdapter {
     private InfluxDB influxDB;
     private String dbName;
 
+
     InfluxConnector(String dbURL, String dbUser, String dbPassword) {
         this.dbURL = dbURL;
         this.dbUser = dbUser;
         this.dbPassword = dbPassword;
         String dbName = "locations";
-        openDB();
     }
 
     InfluxConnector(){
-        openDB();
+    }
+
+    public void finalize(){
+        closeDB();
     }
 
 
-    private void openDB() {
+
+
+    public void openDB() {
         influxDB = InfluxDBFactory.connect(dbURL, dbUser, dbPassword);
-        dbName = "locations";
-        //influxDB.createDatabase(dbName);
+        if( ! influxDB.describeDatabases().contains(dbName)){
+            influxDB.createDatabase(dbName);
+        }
     }
 
-
-    private void closeDB() {
-
-    }
+    public void closeDB() {}
 
     @Override
     public Location saveLocation(Location loc, long timeStamp) {

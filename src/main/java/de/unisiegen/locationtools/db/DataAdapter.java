@@ -16,8 +16,8 @@ public interface DataAdapter {
 
         //void openDB();
 
-        // public void openDB();
-       // public void closeDB();
+        public void openDB();
+        public void closeDB();
         public Location saveLocation(Location loc,long timeStamp);
         public Location saveLocation(Location loc );
         public void saveLocations(Map<Long, Location> locations);
