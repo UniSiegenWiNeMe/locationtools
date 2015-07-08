@@ -9,6 +9,8 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import spark.utils.Assert;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -98,6 +100,14 @@ public class InfluxConnector implements DataAdapter {
 
     @Override
     public List<ClusteredLocation> getAllClusterLocs() {
+        InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
+        String dbName = "locations";
+
+        Query query = new Query("SELECT * FROM locations", dbName);
+        QueryResult queryresult = influxDB.query(query);
+
+
+
         return null;
     }
 
