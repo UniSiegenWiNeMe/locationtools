@@ -26,7 +26,7 @@ public final class Location implements Serializable
 {
 	public final LocationType type;
 	public final String id;
-	public final int lat, lon;
+	public final int lat, lon, alt;
 	public final String place;
 	public final String name;
 
