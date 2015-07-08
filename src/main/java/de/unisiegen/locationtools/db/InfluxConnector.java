@@ -121,7 +121,7 @@ public class InfluxConnector implements DataAdapter {
 
         Query query = new Query("SELECT * FROM locations", dbName);
         QueryResult queryresult = influxDB.query(query);
-
+        queryresult.getResults().get(0).getSeries();
 
 
         return null;
