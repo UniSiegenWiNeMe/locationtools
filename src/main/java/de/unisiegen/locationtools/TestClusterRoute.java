@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by Martin on 08.07.2015.
  */
 public class TestClusterRoute implements Route {
-    private ArrayList<UserLocation> ulocs;
+    private ArrayList<UserLocation> ulocs = getFakeLocaction();
     private DataAdapter myAdapter = new DataAdapter() {
         @Override
         public void openDB() {
@@ -104,6 +104,11 @@ public class TestClusterRoute implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
+
+        return ClusterManagement.clusterLocations(myAdapter,new Date(0), new Date(),null,false);
+    }
+    private ArrayList<UserLocation> getFakeLocaction(){
+        ArrayList<UserLocation> ulocs = new ArrayList<UserLocation>();
         Double [][] locations = new Double[10000][2];
         int x = (int) (50.0*1000000.0);
         int y = (int) (8.0*1000000.0);
@@ -114,8 +119,9 @@ public class TestClusterRoute implements Route {
 
             Location loc = new Location(Location.LocationType.ADDRESS, x+((int)(random*1000000)),y+((int)(random2*1000000)));
             UserLocation uloc = new UserLocation(loc,new Date().getTime(), -1);
+            ulocs.add(uloc);
         }
 
-        return null;
+        return ulocs;
     }
 }
