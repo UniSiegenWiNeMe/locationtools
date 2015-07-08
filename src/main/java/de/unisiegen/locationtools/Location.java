@@ -38,7 +38,7 @@ public final class Location implements Serializable
 		this.lon = lon;
 		this.place = place;
 		this.name = name;
-
+        this.alt = 0;
 		if (name == null && place != null)
 			throw new IllegalArgumentException("places without name cannot exist");
 	}
@@ -51,7 +51,7 @@ public final class Location implements Serializable
 		this.lon = 0;
 		this.place = place;
 		this.name = name;
-
+        this.alt = 0;
 		if (name == null && place != null)
 			throw new IllegalArgumentException("places without name cannot exist");
 	}
@@ -64,6 +64,7 @@ public final class Location implements Serializable
 		this.lon = lon;
 		this.place = null;
 		this.name = null;
+        this.alt = 0;
 	}
 
 	public Location(final LocationType type, final String id)
@@ -74,6 +75,7 @@ public final class Location implements Serializable
 		this.lon = 0;
 		this.place = null;
 		this.name = null;
+        this.alt = 0;
 	}
 
 	public Location(final LocationType type, final int lat, final int lon)
@@ -84,7 +86,18 @@ public final class Location implements Serializable
 		this.lon = lon;
 		this.place = null;
 		this.name = null;
+        this.alt = 0;
 	}
+    public Location(final LocationType type, final int lat, final int lon, final int alt)
+    {
+        this.type = type;
+        this.id = null;
+        this.lat = lat;
+        this.lon = lon;
+        this.place = null;
+        this.name = null;
+        this.alt = alt;
+    }
 
 	public final boolean hasId()
 	{

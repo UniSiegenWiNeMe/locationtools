@@ -10,14 +10,16 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Martin on 08.07.2015.
  */
 public class TestClusterRoute implements Route {
-    private ArrayList
+    private ArrayList<UserLocation> ulocs;
     private DataAdapter myAdapter = new DataAdapter() {
         @Override
         public void openDB() {
@@ -40,7 +42,17 @@ public class TestClusterRoute implements Route {
         }
 
         @Override
+        public void saveLocations(Map<Long, Location> locations) {
+
+        }
+
+        @Override
         public ClusteredLocation saveClusterLocation(Location loc) {
+            return null;
+        }
+
+        @Override
+        public ClusteredLocation saveClusterLocation(Location loc, long timestamp) {
             return null;
         }
 
@@ -88,7 +100,7 @@ public class TestClusterRoute implements Route {
         public List<UserLocation> getUnclusteredHistoryLocs(long since, long until) {
             return null;
         }
-    }
+    };
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
