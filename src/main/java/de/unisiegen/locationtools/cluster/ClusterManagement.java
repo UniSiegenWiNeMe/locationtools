@@ -1,10 +1,7 @@
 package de.unisiegen.locationtools.cluster;
 
 
-import android.util.Log;
 
-
-import com.google.gson.Gson;
 
 import de.unisiegen.locationtools.Location;
 import net.sf.javaml.clustering.DensityBasedSpatialClustering;
@@ -12,18 +9,9 @@ import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.DefaultDataset;
 import net.sf.javaml.core.Instance;
 
-import org.json.JSONArray;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.Vector;
+
+import java.util.*;
 
 /**
  * Created by Martin on 05.03.2015.
@@ -37,18 +25,13 @@ public class ClusterManagement {
     public static HashMap<Location, Dataset> clusterLocations(Date since, Date until, Integer max, boolean onlyUnClustered) {
         HashMap<Location, Dataset> clusterCenters = new HashMap<Location, Dataset>();
 
-        Utilities.openDBConnection();
 
         Dataset data = new DefaultDataset();
-        Log.d("PTEnabler", "Initializing Locations for clustering\nSince:" + since.toLocaleString() + "\nUntil:" + until.toLocaleString());
-        List<UserLocation> locs;
-        if (onlyUnClustered) {
-            locs = Utilities.openDBConnection().getUnclusteredHistoryLocs(since.getTime(), until.getTime());
-        } else {
-            locs = Utilities.openDBConnection().getAllHistoryLocs(since.getTime(), until.getTime());
-        }
 
-        Log.d("PTEnabler", "Number of Locations available for clustering:" + locs.size());
+        List<UserLocation> locs = new ArrayList<UserLocation>();
+        //TODO: initialize locs with location data
+
+          //  Log.d("PTEnabler", "Number of Locations available for clustering:" + locs.size());
 
         if (max != null) {
             int allLocs = locs.size();
@@ -71,19 +54,19 @@ public class ClusterManagement {
             }
         }
 
-        Log.d("PTEnabler", "" + data.size() + " Locations initialized for clustering");
+       // Log.d("PTEnabler", "" + data.size() + " Locations initialized for clustering");
         int minLocs = Math.max(10, (int) (data.size() * minLocsFactor));
         if (onlyUnClustered) {
             minLocs *= 3;
         }
-        Log.d("PTEnabler", "" + minLocs + " Locations required for clustering");
+       // Log.d("PTEnabler", "" + minLocs + " Locations required for clustering");
         DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(distance4Clustering, minLocs, new MyDistanceMeasure());
-        Log.d("PTEnabler", "Starting Clustering");
+     //   Log.d("PTEnabler", "Starting Clustering");
 
         resultsCluster = clusterer.cluster(data);
 
 
-        Log.d("PTEnabler", "Finished Clustering");
+       // Log.d("PTEnabler", "Finished Clustering");
         for (Dataset y : resultsCluster) {
             double sumLat = 0.0;
             double sumLon = 0.0;
@@ -100,7 +83,7 @@ public class ClusterManagement {
             }
             int lat = (int) ((sumLat / (double) y.size()) * 1000000.0);
             int lon = (int) ((sumLon / (double) y.size()) * 1000000.0);
-            clusterCenters.put(new Location(LocationType.ADDRESS, lat, lon), y);
+            clusterCenters.put(new Location(Location.LocationType.ADDRESS, lat, lon), y);
         }
 
         return clusterCenters;
@@ -111,7 +94,9 @@ public class ClusterManagement {
     }
 
     public static List<ClusteredLocation> getClusteredLocationsFromCache() {
-        return Utilities.openDBConnection().getAllClusterLocs();
+        //TODO: get Clusters from Cache
+        //return Utilities.openDBConnection().getAllClusterLocs();
+        return null;
     }
     public static List<ClusteredLocation> getClusteredLocationWithIDs(Collection<Long> ids){
         List<ClusteredLocation> res = getClusteredLocationsFromCache();
@@ -168,7 +153,7 @@ public class ClusterManagement {
     }
 
     public static void addNewClusteredLocations(Map<Location, Dataset> locs, ClusterMetaData.ClusterType type) {
-        boolean wasOpen = Utilities.isDbOpen();
+
 
         for (Location loc : locs.keySet()) {
             ClusteredLocation toAdd = null;
@@ -181,39 +166,39 @@ public class ClusterManagement {
                 }
             }
             if (toAdd == null) {
-                Utilities.openDBConnection().saveClusterLocation(loc, locs.get(loc), type);
+               // Utilities.openDBConnection().saveClusterLocation(loc, locs.get(loc), type);
             } else {
-                Log.d("PTEnabler", "Updating Clustered Location: ID " + toAdd.getId() + " Last Clustered: " + new Date(toAdd.getDate()).toLocaleString());
+               // Log.d("PTEnabler", "Updating Clustered Location: ID " + toAdd.getId() + " Last Clustered: " + new Date(toAdd.getDate()).toLocaleString());
                 int lat = (loc.lat + toAdd.getLoc().lat) / 2;
                 int lon = (loc.lon + toAdd.getLoc().lon) / 2;
                 Location upatedLL;
                 if (toAdd.getLoc().place != null) {
-                    upatedLL = new Location(LocationType.ADDRESS, toAdd.getLoc().id, lat, lon, toAdd.getLoc().place, toAdd.getLoc().name);
+                    upatedLL = new Location(Location.LocationType.ADDRESS, toAdd.getLoc().id, lat, lon, toAdd.getLoc().place, toAdd.getLoc().name);
                 } else {
-                    upatedLL = new Location(LocationType.ADDRESS, lat, lon);
+                    upatedLL = new Location(Location.LocationType.ADDRESS, lat, lon);
                 }
 
                 toAdd.setDate(new Date().getTime());
                 toAdd.setLoc(upatedLL);
                 toAdd.setCount(toAdd.getCount() + 1);
-                Utilities.openDBConnection().updateClusteredLocation(toAdd, locs.get(loc));
+               // Utilities.openDBConnection().updateClusteredLocation(toAdd, locs.get(loc));
 
             }
         }
 
 
-        if (!wasOpen) {
-            Utilities.closeDBConnection();
-        }
+
     }
 
     public static void addNewClusteredLocations(List<ClusteredLocation> clocs) {
 
+        /*
         for (ClusteredLocation loc : clocs) {
 
             Utilities.openDBConnection().updateClusteredLocation(loc, null);
 
         }
+        */
     }
 
     public static void clearClusters() {
@@ -221,7 +206,9 @@ public class ClusterManagement {
     }
 
     public static void clearClusters(int olderThanXdays) {
+        /*
         Utilities.openDBConnection().clearClusteredLocations(olderThanXdays);
+        */
     }
 
     public static Set<PropableNextLocationResult> getProbableDestinations(long cid, boolean includeCurrent) {

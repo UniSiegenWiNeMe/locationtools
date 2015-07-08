@@ -3,21 +3,19 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+
 
 import net.sf.javaml.core.Dataset;
 
-
-import de.ms.ptenabler.util.Utilities;
-import de.schildbach.pte.dto.Location;
-
-public class ClusterService extends IntentService {
+public class ClusterService {
 
 	public final String LAST_CLUSTERED = "LAST_CLUSTERED";
 	private double mintransitionprob = 0.05;
     private int timeinFuture= 30;
+   /*
     private SharedPreferences prefs;
 	private SharedPreferences.Editor editor;
+	*/
 	public ClusterService() {
 		super("TMClusteringService");
 		

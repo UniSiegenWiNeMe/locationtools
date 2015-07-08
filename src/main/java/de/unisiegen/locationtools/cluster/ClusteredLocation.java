@@ -9,11 +9,12 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import de.unisiegen.locationtools.Location;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.ms.ptenabler.util.Utilities;
-import de.schildbach.pte.dto.Location;
+
+
 
 public class ClusteredLocation implements Comparable<ClusteredLocation>, Serializable{
 
@@ -144,7 +145,7 @@ public class ClusteredLocation implements Comparable<ClusteredLocation>, Seriali
                 TreeSet<PropableNextLocationResult> temp = new TreeSet<PropableNextLocationResult>();
                 temp.addAll(unique);
                 for(PropableNextLocationResult pnlr: temp){
-                    Log.d("PTEnabler", ""+ pnlr.getCloc().getId() + " " + pnlr.getCloc().getLoc().place + " " + pnlr.getProb());
+                  //  Log.d("PTEnabler", ""+ pnlr.getCloc().getId() + " " + pnlr.getCloc().getLoc().place + " " + pnlr.getProb());
                     probdata.add(pnlr.getCloc());
                 }
             }else{
@@ -168,36 +169,7 @@ public class ClusteredLocation implements Comparable<ClusteredLocation>, Seriali
     return results;
     }
 
-    public void getProbableNextLocationsAsync(double minTransitionProb, long timeInFutureInMin, ProbLocationCalculationListener listener){
-        ProbNextLocationTask pnlt = new ProbNextLocationTask(this,minTransitionProb,timeInFutureInMin,listener);
-        pnlt.execute();
-    }
-
-
-    public class ProbNextLocationTask extends AsyncTask<Void,Void,Vector<ClusteredLocation>>{
-        private ClusteredLocation cl;
-        private double minTransitionProb;
-        private long timeInFutureInMin;
-        private ProbLocationCalculationListener listener;
-
-        public ProbNextLocationTask(ClusteredLocation cl, double minTransitionProb, long timeInFutureInMin, ProbLocationCalculationListener listener){
-            this.cl = cl;
-            this.minTransitionProb = minTransitionProb;
-            this.timeInFutureInMin = timeInFutureInMin;
-            this.listener = listener;
-        }
-        @Override
-        protected Vector<ClusteredLocation> doInBackground(Void... params) {
-
-            return cl.getProbableNextLocations(minTransitionProb,timeInFutureInMin);
-        }
-
-        @Override
-        protected void onPostExecute(Vector<ClusteredLocation> clusteredLocations) {
-            listener.onCalculationCompleted(clusteredLocations);
-        }
-    }
-
+    /*
     public class ReverseOSMGeocodeRequest extends AsyncTask<Void, Void, ClusteredLocation>{
 	
 
@@ -244,6 +216,6 @@ public class ClusteredLocation implements Comparable<ClusteredLocation>, Seriali
 	
 
 }
-	
+	*/
 }
 
