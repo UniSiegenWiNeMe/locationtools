@@ -11,7 +11,6 @@ import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
-import spark.utils.Assert;
 
 import java.util.Iterator;
 import java.util.List;
@@ -39,11 +38,8 @@ public class InfluxConnector implements DataAdapter {
     InfluxConnector(){
     }
 
-    public void finalize(){
-        closeDB();
+    public void finalize() {
     }
-
-
 
 
     public void openDB() {
@@ -53,7 +49,9 @@ public class InfluxConnector implements DataAdapter {
         }
     }
 
-    public void closeDB() {}
+    public void closeDB() {
+        influxDB = null;
+    }
 
     /** Fixme: add user and namespace to */
     @Override
@@ -145,12 +143,10 @@ public class InfluxConnector implements DataAdapter {
     queryresult.getResults().get(0).getSeries();
 
     return null;
-}
-
-
+    }
 
     @Override
-    public List<UserLocation> getAllHistoryLocs(String user, String namespace, long since, long until, boolean timedescending, boolean onlyUnclustered) {
+    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
         return null;
     }
 
@@ -158,6 +154,5 @@ public class InfluxConnector implements DataAdapter {
     public List<UserLocation> getUnclusteredHistoryLocs(String user, String namespace, long since, long until) {
         return null;
     }
-
 
 }

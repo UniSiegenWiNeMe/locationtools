@@ -5,7 +5,6 @@ import de.unisiegen.locationtools.cluster.ClusteredLocation;
 import de.unisiegen.locationtools.cluster.UserLocation;
 import de.unisiegen.locationtools.db.DataAdapter;
 import net.sf.javaml.core.Dataset;
-import net.sf.javaml.core.DenseInstance;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -32,62 +31,62 @@ public class TestClusterRoute implements Route {
         }
 
         @Override
-        public Location saveLocation(Location loc, long timeStamp) {
+        public Location saveLocation(String user, String namespace, Location loc, long timeStamp) {
             return null;
         }
 
         @Override
-        public Location saveLocation(Location loc) {
+        public Location saveLocation(String user, String namespace, Location loc) {
             return null;
         }
 
         @Override
-        public void saveLocations(Map<Long, Location> locations) {
+        public void saveLocations(String user, String namespace, Map<Long, Location> locations) {
 
         }
 
         @Override
-        public ClusteredLocation saveClusterLocation(Location loc) {
+        public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc) {
             return null;
         }
 
         @Override
-        public ClusteredLocation saveClusterLocation(Location loc, long timestamp) {
+        public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc, long timestamp) {
             return null;
         }
 
         @Override
-        public ClusteredLocation saveClusterLocation(Location loc, Dataset ds) {
+        public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc, Dataset ds) {
             return null;
         }
 
         @Override
-        public ClusteredLocation updateClusteredLocation(ClusteredLocation updatedLoc) {
+        public ClusteredLocation updateClusteredLocation(String user, String namespace, ClusteredLocation updatedLoc) {
             return null;
         }
 
         @Override
-        public ClusteredLocation updateClusteredLocation(ClusteredLocation updatedLoc, Dataset ds) {
+        public ClusteredLocation updateClusteredLocation(String user, String namespace, ClusteredLocation updatedLoc, Dataset ds) {
             return null;
         }
 
         @Override
-        public void setClusterIDOfLocations(Dataset ds, long id) {
+        public void setClusterIDOfLocations(String user, Dataset ds, String namespace, long id) {
 
         }
 
         @Override
-        public void clearLocationHistory(long since, long until) {
+        public void clearLocationHistory(String user, long since, String namespace, long until) {
 
         }
 
         @Override
-        public void clearClusteredLocations(long since, long until) {
+        public void clearClusteredLocations(String user, long since, String namespace, long until) {
 
         }
 
         @Override
-        public List<ClusteredLocation> getAllClusterLocs() {
+        public List<ClusteredLocation> getAllClusterLocs(String user, String namespace) {
             return null;
         }
 
@@ -97,9 +96,10 @@ public class TestClusterRoute implements Route {
         }
 
         @Override
-        public List<UserLocation> getUnclusteredHistoryLocs(long since, long until) {
+        public List<UserLocation> getUnclusteredHistoryLocs(String user, String namespace, long since, long until) {
             return null;
         }
+
     };
 
     @Override
