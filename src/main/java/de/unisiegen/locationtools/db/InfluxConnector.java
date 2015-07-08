@@ -142,7 +142,7 @@ public class InfluxConnector implements DataAdapter {
     }
 
     @Override
-    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
+    public List<UserLocation> getAllHistoryLocs(String user,String namespace, long since, long until, boolean timedescending, boolean onlyUnclustered) {
         return null;
     }
 
