@@ -29,7 +29,7 @@ public interface DataAdapter {
         public void clearLocationHistory(String user,long since,String namespace, long until);
         public void clearClusteredLocations(String user,long since,String namespace, long until);
         public List<ClusteredLocation> getAllClusterLocs(String user,String namespace);
-        public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered);
+        public List<UserLocation> getAllHistoryLocs(String user,String namespace,long since, long until, boolean timedescending, boolean onlyUnclustered);
         public List<UserLocation> getUnclusteredHistoryLocs(String user,String namespace,long since, long until);
 
 

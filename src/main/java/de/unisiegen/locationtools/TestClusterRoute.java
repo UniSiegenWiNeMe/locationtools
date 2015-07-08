@@ -22,7 +22,7 @@ public class TestClusterRoute implements Route {
     private DataAdapter myAdapter = new DataAdapter() {
         @Override
         public void openDB() {
-
+            ulocs = getFakeLocaction();
         }
 
         @Override
@@ -92,7 +92,7 @@ public class TestClusterRoute implements Route {
 
         @Override
         public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
-            return null;
+            return ulocs;
         }
 
         @Override
