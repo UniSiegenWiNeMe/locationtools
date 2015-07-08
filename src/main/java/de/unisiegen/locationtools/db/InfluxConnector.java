@@ -11,7 +11,9 @@ import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,7 +43,42 @@ public class InfluxConnector implements DataAdapter {
     }
 
     @Override
+    public void saveLocations(Map<Long, Location> locations) {
+        InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
+        String dbName = "locations";
+        //influxDB.createDatabase(dbName);
+        BatchPoints batchPoints = BatchPoints
+                .database(dbName)
+                .retentionPolicy("default")
+                .consistency(InfluxDB.ConsistencyLevel.ALL)
+                .build();
+
+        //loop
+
+        Iterator it = locations.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+
+        Point point1 = Point.measurement("Test")
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .field("value", 0.66)
+                .build();
+
+        batchPoints.point(point1);
+
+        influxDB.write(batchPoints);
+    }
+
+    @Override
     public ClusteredLocation saveClusterLocation(Location loc) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation saveClusterLocation(Location loc, long timestamp) {
         return null;
     }
 
