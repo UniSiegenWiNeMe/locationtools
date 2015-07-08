@@ -4,6 +4,7 @@ import de.unisiegen.locationtools.Location;
 import de.unisiegen.locationtools.cluster.ClusteredLocation;
 import de.unisiegen.locationtools.cluster.UserLocation;
 
+import net.sf.javaml.core.Dataset;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
@@ -102,9 +103,10 @@ public class InfluxConnector implements DataAdapter {
     }
 
     @Override
-    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean descending) {
+    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
         return null;
     }
+
 
     @Override
     public List<UserLocation> getUnclusteredHistoryLocs(long since, long until) {
