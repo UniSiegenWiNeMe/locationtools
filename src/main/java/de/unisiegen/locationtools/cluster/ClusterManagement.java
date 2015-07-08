@@ -28,7 +28,7 @@ public class ClusterManagement {
         HashMap<Location, Dataset> clusterCenters = new HashMap<Location, Dataset>();
 
 
-        List<UserLocation> locs= adapter.getAllHistoryLocs(since.getTime(),until.getTime(),true,onlyUnClustered);
+        List<UserLocation> locs= adapter.getAllHistoryLocs(null,null,since.getTime(),until.getTime(),true,onlyUnClustered);
         System.out.println( "Number of Locations available for clustering:" + locs.size());
         Dataset data = new DefaultDataset();
         if (max != null) {
