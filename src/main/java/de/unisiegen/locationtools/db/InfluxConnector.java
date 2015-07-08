@@ -12,6 +12,7 @@ import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,7 +42,17 @@ public class InfluxConnector implements DataAdapter {
     }
 
     @Override
+    public void saveLocations(Map<Long, Location> locations) {
+        
+    }
+
+    @Override
     public ClusteredLocation saveClusterLocation(Location loc) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation saveClusterLocation(Location loc, long timestamp) {
         return null;
     }
 
