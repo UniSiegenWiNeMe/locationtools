@@ -4,6 +4,7 @@ import de.unisiegen.locationtools.Location;
 import de.unisiegen.locationtools.cluster.ClusteredLocation;
 import de.unisiegen.locationtools.cluster.UserLocation;
 
+import net.sf.javaml.core.Dataset;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
@@ -12,7 +13,9 @@ import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import spark.utils.Assert;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,6 +36,16 @@ public class InfluxConnector implements DataAdapter {
 
     @Override
     public Location saveLocation(Location loc, long timeStamp) {
+        return null;
+    }
+
+    @Override
+    public Location saveLocation(Location loc) {
+        return null;
+    }
+
+    @Override
+    public void saveLocations(Map<Long, Location> locations) {
         InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
         String dbName = "locations";
         //influxDB.createDatabase(dbName);
@@ -44,6 +57,13 @@ public class InfluxConnector implements DataAdapter {
 
         //loop
 
+        Iterator it = locations.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+
         Point point1 = Point.measurement("Test")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .field("value", 0.66)
@@ -52,19 +72,15 @@ public class InfluxConnector implements DataAdapter {
         batchPoints.point(point1);
 
         influxDB.write(batchPoints);
-        //Query query = new Query("SELECT idle FROM cpu", dbName);
-        //influxDB.query(query);
-        //influxDB.deleteDatabase(dbName);
-        return null;
-    }
-
-    @Override
-    public Location saveLocation(Location loc) {
-        return null;
     }
 
     @Override
     public ClusteredLocation saveClusterLocation(Location loc) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation saveClusterLocation(Location loc, long timestamp) {
         return null;
     }
 
@@ -112,9 +128,10 @@ public class InfluxConnector implements DataAdapter {
     }
 
     @Override
-    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean descending) {
+    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
         return null;
     }
+
 
     @Override
     public List<UserLocation> getUnclusteredHistoryLocs(long since, long until) {
