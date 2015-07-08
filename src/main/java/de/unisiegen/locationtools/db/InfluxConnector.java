@@ -4,6 +4,7 @@ import de.unisiegen.locationtools.Location;
 import de.unisiegen.locationtools.cluster.ClusteredLocation;
 import de.unisiegen.locationtools.cluster.UserLocation;
 
+import net.sf.javaml.core.Dataset;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
@@ -31,28 +32,6 @@ public class InfluxConnector implements DataAdapter {
 
     @Override
     public Location saveLocation(Location loc, long timeStamp) {
-        InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
-        String dbName = "locations";
-        //influxDB.createDatabase(dbName);
-        BatchPoints batchPoints = BatchPoints
-                .database(dbName)
-                .retentionPolicy("default")
-                .consistency(InfluxDB.ConsistencyLevel.ALL)
-                .build();
-
-        //loop
-
-        Point point1 = Point.measurement("Test")
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .field("value", 0.66)
-                .build();
-
-        batchPoints.point(point1);
-
-        influxDB.write(batchPoints);
-        //Query query = new Query("SELECT idle FROM cpu", dbName);
-        //influxDB.query(query);
-        //influxDB.deleteDatabase(dbName);
         return null;
     }
 
@@ -102,9 +81,10 @@ public class InfluxConnector implements DataAdapter {
     }
 
     @Override
-    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean descending) {
+    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
         return null;
     }
+
 
     @Override
     public List<UserLocation> getUnclusteredHistoryLocs(long since, long until) {
