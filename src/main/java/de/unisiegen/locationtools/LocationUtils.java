@@ -18,7 +18,14 @@
 package de.unisiegen.locationtools;
 
 
+<<<<<<< Updated upstream
 import de.unisiegen.locationtools.db.InfluxConnector;
+=======
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.BatchPoints;
+import org.influxdb.dto.Point;
+>>>>>>> Stashed changes
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -31,6 +38,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -139,13 +148,47 @@ public final class LocationUtils implements Route
 			//Log.d("PTEnabler", "Imported " + myXMLHandler.items.size() + " Locations");
 			return myXMLHandler.items;
 	}
+<<<<<<< Updated upstream
 	@Deprecated
 	public void saveToDB() {
+=======
+
+	public void saveToDB(HashMap<Long,Location> locationHash) {
+		InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
+		String dbName = "locations";
+		//influxDB.createDatabase(dbName);
+		BatchPoints batchPoints = BatchPoints
+				.database(dbName)
+				.retentionPolicy("default")
+				.consistency(InfluxDB.ConsistencyLevel.ALL)
+				.build();
+
+		//loop
+
+        Iterator it = locationHash.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+
+		Point point1 = Point.measurement("Test")
+				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+				.field("value", 0.66)
+				.build();
+
+		batchPoints.point(point1);
+		
+		influxDB.write(batchPoints);
+		//Query query = new Query("SELECT idle FROM cpu", dbName);
+		//influxDB.query(query);
+		//influxDB.deleteDatabase(dbName);
+>>>>>>> Stashed changes
 	}
 
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
-		saveToDB();
+		saveToDB(null);
 		return "klaus";
 	}
 }
