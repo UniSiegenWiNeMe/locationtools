@@ -1,5 +1,7 @@
 package de.unisiegen.locationtools;
 
+import de.unisiegen.locationtools.db.InfluxConnector;
+
 import static spark.Spark.*;
 
 /**
@@ -10,6 +12,7 @@ public class Main {
         get("/hello", (req, res) -> "Hello World");
         post("/kml", new KMLRoute());
         get("/testFake", new TestClusterRoute());
+        post("/testSave", new InfluxConnector());
     }
 
 }
