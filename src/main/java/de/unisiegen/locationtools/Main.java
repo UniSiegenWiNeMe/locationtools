@@ -1,5 +1,6 @@
 package de.unisiegen.locationtools;
 
+import de.unisiegen.locationtools.db.DataAdapter;
 import de.unisiegen.locationtools.db.InfluxConnector;
 
 import static spark.Spark.*;
@@ -9,8 +10,10 @@ import static spark.Spark.*;
  */
 public class Main {
     public static void main(String[] args) {
+        DataAdapter influxDb = new InfluxConnector();
+
         get("/hello", (req, res) -> "Hello World");
-        post("/kml", new KMLRoute());
+        post("/kml", new KMLRoute(influxDb));
         get("/testFake", new TestClusterRoute());
     }
 
