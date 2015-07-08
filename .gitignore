@@ -15,3 +15,8 @@ hs_err_pid*
 # Idea
 
 .idea
+.gradle
+gradle
+gradlew
+gradlew.bat
+locationtools.iml
