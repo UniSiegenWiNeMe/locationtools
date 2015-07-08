@@ -10,6 +10,8 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import spark.utils.Assert;
 
 import java.util.Iterator;
 import java.util.List;
@@ -20,15 +22,33 @@ import java.util.concurrent.TimeUnit;
  * Created by lars on 08/07/15.
  */
 public class InfluxConnector implements DataAdapter {
-    String dbURL="http://localhost:8086";
+    private String dbURL="http://141.99.14.50:8086";
+    private String dbUser = "root";
+    private String dbPassword = "root";
+    private InfluxDB influxDB;
+    private String dbName;
 
-    @Override
-    public void openDB() {
-
+    InfluxConnector(String dbURL, String dbUser, String dbPassword) {
+        this.dbURL = dbURL;
+        this.dbUser = dbUser;
+        this.dbPassword = dbPassword;
+        String dbName = "locations";
+        openDB();
     }
 
-    @Override
-    public void closeDB() {
+    InfluxConnector(){
+        openDB();
+    }
+
+
+    private void openDB() {
+        influxDB = InfluxDBFactory.connect(dbURL, dbUser, dbPassword);
+        dbName = "locations";
+        //influxDB.createDatabase(dbName);
+    }
+
+
+    private void closeDB() {
 
     }
 
@@ -44,9 +64,6 @@ public class InfluxConnector implements DataAdapter {
 
     @Override
     public void saveLocations(Map<Long, Location> locations) {
-        InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
-        String dbName = "locations";
-        //influxDB.createDatabase(dbName);
         BatchPoints batchPoints = BatchPoints
                 .database(dbName)
                 .retentionPolicy("default")
@@ -114,6 +131,14 @@ public class InfluxConnector implements DataAdapter {
 
     @Override
     public List<ClusteredLocation> getAllClusterLocs() {
+        InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
+        String dbName = "locations";
+
+        Query query = new Query("SELECT * FROM locations", dbName);
+        QueryResult queryresult = influxDB.query(query);
+
+
+
         return null;
     }
 
