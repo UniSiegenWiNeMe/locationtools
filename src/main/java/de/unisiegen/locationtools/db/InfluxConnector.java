@@ -63,21 +63,17 @@ public class InfluxConnector implements DataAdapter {
                 .consistency(InfluxDB.ConsistencyLevel.ALL)
                 .build();
 
-        //loop
+        for (Map.Entry<Long, Location> entry : locations.entrySet())
+        {
+            Point point1 = Point.measurement("Test")
+                    .time(entry.getKey(), TimeUnit.MILLISECONDS)
+                    .field("value", entry.getValue()).field("namespace",namespace).field("user",user)
+                    .build();
 
-        Iterator it = locations.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
-            it.remove(); // avoids a ConcurrentModificationException
+            batchPoints.point(point1);
         }
 
-        Point point1 = Point.measurement("Test")
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .field("value", 0.66)
-                .build();
 
-        batchPoints.point(point1);
 
         influxDB.write(batchPoints);
 
@@ -88,7 +84,7 @@ public class InfluxConnector implements DataAdapter {
         return null;
     }
 
-    @Override
+        @Override
     public Location saveLocation(String user, String namespace, Location loc) {
         return null;
     }
