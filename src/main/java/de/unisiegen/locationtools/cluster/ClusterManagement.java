@@ -4,8 +4,8 @@ package de.unisiegen.locationtools.cluster;
 
 
 import com.google.gson.Gson;
-import de.unisiegen.locationtools.DataAdapter;
 import de.unisiegen.locationtools.Location;
+import de.unisiegen.locationtools.db.DataAdapter;
 import net.sf.javaml.clustering.DensityBasedSpatialClustering;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.DefaultDataset;
