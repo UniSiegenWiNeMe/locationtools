@@ -18,11 +18,7 @@
 package de.unisiegen.locationtools;
 
 
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.BatchPoints;
-import org.influxdb.dto.Point;
-import org.influxdb.dto.Query;
+import de.unisiegen.locationtools.db.InfluxConnector;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -143,30 +139,8 @@ public final class LocationUtils implements Route
 			//Log.d("PTEnabler", "Imported " + myXMLHandler.items.size() + " Locations");
 			return myXMLHandler.items;
 	}
-
+	@Deprecated
 	public void saveToDB() {
-		InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
-		String dbName = "locations";
-		//influxDB.createDatabase(dbName);
-		BatchPoints batchPoints = BatchPoints
-				.database(dbName)
-				.retentionPolicy("default")
-				.consistency(InfluxDB.ConsistencyLevel.ALL)
-				.build();
-
-		//loop
-
-		Point point1 = Point.measurement("Test")
-				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-				.field("value", 0.66)
-				.build();
-
-		batchPoints.point(point1);
-		
-		influxDB.write(batchPoints);
-		//Query query = new Query("SELECT idle FROM cpu", dbName);
-		//influxDB.query(query);
-		//influxDB.deleteDatabase(dbName);
 	}
 
 	@Override
