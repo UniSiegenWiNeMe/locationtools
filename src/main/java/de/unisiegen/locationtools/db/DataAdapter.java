@@ -1,5 +1,6 @@
-package de.unisiegen.locationtools;
+package de.unisiegen.locationtools.db;
 
+import de.unisiegen.locationtools.Location;
 import de.unisiegen.locationtools.cluster.ClusteredLocation;
 import de.unisiegen.locationtools.cluster.UserLocation;
 import net.sf.javaml.core.Dataset;

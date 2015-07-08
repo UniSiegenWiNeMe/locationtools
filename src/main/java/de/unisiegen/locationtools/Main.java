@@ -9,6 +9,7 @@ public class Main {
     public static void main(String[] args) {
         get("/hello", (req, res) -> "Hello World");
         post("/kml", new KMLRoute());
+        post("/save", new LocationUtils());
     }
 
 }
