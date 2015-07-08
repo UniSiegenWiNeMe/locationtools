@@ -32,7 +32,7 @@ private final ClusteredLocation cloc;
     public boolean equals(Object o) {
         if(o instanceof PropableNextLocationResult){
             if(this.compareTo((PropableNextLocationResult)o) == 0){
-                Log.d("PTEnabler", " Gleich "+ this.getCloc().getId()+" // " + ((PropableNextLocationResult)o).getCloc().getId());
+                //Log.d("PTEnabler", " Gleich "+ this.getCloc().getId()+" // " + ((PropableNextLocationResult)o).getCloc().getId());
                 return true;
             }else{
                 return false;
