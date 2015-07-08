@@ -17,6 +17,16 @@
 
 package de.unisiegen.locationtools;
 
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.*;
+
 /**
  * @author Andreas Schildbach
  */
@@ -110,5 +120,26 @@ public final class LocationUtils
 		}
 
 		return (float) (b * A * (sigma - deltaSigma));
+	}
+	public boolean importLocations(String xml){
+		try{
+			SAXParserFactory spf = SAXParserFactory.newInstance();
+			SAXParser sp = spf.newSAXParser();
+			XMLReader xr = sp.getXMLReader();
+			KMLSAXParser myXMLHandler = new KMLSAXParser();
+			xr.setContentHandler(myXMLHandler);
+			xr.parse(new InputSource(new StringReader(xml)));
+			//Log.d("PTEnabler", "Imported " + myXMLHandler.items.size() + " Locations");
+		}catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return false;
 	}
 }
