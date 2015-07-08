@@ -55,18 +55,10 @@ public class InfluxConnector implements DataAdapter {
 
     public void closeDB() {}
 
+    /** Fixme: add user and namespace to */
     @Override
-    public Location saveLocation(Location loc, long timeStamp) {
-        return null;
-    }
+    public void saveLocations(String user,String namespace,Map<Long, Location> locations) {
 
-    @Override
-    public Location saveLocation(Location loc) {
-        return null;
-    }
-
-    @Override
-    public void saveLocations(Map<Long, Location> locations) {
         BatchPoints batchPoints = BatchPoints
                 .database(dbName)
                 .retentionPolicy("default")
@@ -90,69 +82,82 @@ public class InfluxConnector implements DataAdapter {
         batchPoints.point(point1);
 
         influxDB.write(batchPoints);
+
     }
 
     @Override
-    public ClusteredLocation saveClusterLocation(Location loc) {
+    public Location saveLocation(String user, String namespace, Location loc, long timeStamp) {
         return null;
     }
 
     @Override
-    public ClusteredLocation saveClusterLocation(Location loc, long timestamp) {
-        return null;
-    }
-
-    @Override
-    public ClusteredLocation saveClusterLocation(Location loc, Dataset ds) {
-        return null;
-    }
-
-    @Override
-    public ClusteredLocation updateClusteredLocation(ClusteredLocation updatedLoc) {
-        return null;
-    }
-
-    @Override
-    public ClusteredLocation updateClusteredLocation(ClusteredLocation updatedLoc, Dataset ds) {
-        return null;
-    }
-
-    @Override
-    public void setClusterIDOfLocations(Dataset ds, long id) {
-
-    }
-
-    @Override
-    public void clearLocationHistory(long since, long until) {
-
-    }
-
-    @Override
-    public void clearClusteredLocations(long since, long until) {
-
-    }
-
-    @Override
-    public List<ClusteredLocation> getAllClusterLocs() {
-        InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
-        String dbName = "locations";
-
-        Query query = new Query("SELECT * FROM locations", dbName);
-        QueryResult queryresult = influxDB.query(query);
-
-
-
-        return null;
-    }
-
-    @Override
-    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
+    public Location saveLocation(String user, String namespace, Location loc) {
         return null;
     }
 
 
     @Override
-    public List<UserLocation> getUnclusteredHistoryLocs(long since, long until) {
+    public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc) {
         return null;
     }
+
+    @Override
+    public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc, long timestamp) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc, Dataset ds) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation updateClusteredLocation(String user, String namespace, ClusteredLocation updatedLoc) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation updateClusteredLocation(String user, String namespace, ClusteredLocation updatedLoc, Dataset ds) {
+        return null;
+    }
+
+    @Override
+    public void setClusterIDOfLocations(String user, Dataset ds, String namespace, long id) {
+
+    }
+
+    @Override
+    public void clearLocationHistory(String user, long since, String namespace, long until) {
+
+    }
+
+    @Override
+    public void clearClusteredLocations(String user, long since, String namespace, long until) {
+
+    }
+
+    /** Fixme: user and namespace are new. */
+    @Override
+    public List<ClusteredLocation> getAllClusterLocs(String user, String namespace) {
+
+    Query query = new Query("SELECT * FROM locations", dbName);
+    QueryResult queryresult = influxDB.query(query);
+    queryresult.getResults().get(0).getSeries();
+
+    return null;
+}
+
+
+
+    @Override
+    public List<UserLocation> getAllHistoryLocs(String user, String namespace, long since, long until, boolean timedescending, boolean onlyUnclustered) {
+        return null;
+    }
+
+    @Override
+    public List<UserLocation> getUnclusteredHistoryLocs(String user, String namespace, long since, long until) {
+        return null;
+    }
+
+
 }
