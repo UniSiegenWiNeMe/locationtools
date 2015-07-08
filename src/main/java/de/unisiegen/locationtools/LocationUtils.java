@@ -18,6 +18,8 @@
 package de.unisiegen.locationtools;
 
 
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
