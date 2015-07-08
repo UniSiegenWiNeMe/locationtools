@@ -140,9 +140,9 @@ public class InfluxConnector implements DataAdapter {
     @Override
     public List<ClusteredLocation> getAllClusterLocs(String user, String namespace) {
 
-    Query query = new Query("SELECT * FROM locations", dbName);
+    Query query = new Query("SELECT * FROM locations WHERE user = '" + user + "' AND namespace = '" + namespace + "'", dbName);
     QueryResult queryresult = influxDB.query(query);
-    queryresult.getResults().get(0).getSeries();
+   // queryresult.getResults().get(0).getSeries();
 
     return null;
 }
