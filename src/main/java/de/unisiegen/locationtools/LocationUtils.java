@@ -35,6 +35,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andreas Schildbach
