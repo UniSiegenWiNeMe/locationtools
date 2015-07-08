@@ -5,23 +5,24 @@ import de.unisiegen.locationtools.cluster.ClusteredLocation;
 import de.unisiegen.locationtools.cluster.UserLocation;
 import de.unisiegen.locationtools.db.DataAdapter;
 import net.sf.javaml.core.Dataset;
-import net.sf.javaml.core.DenseInstance;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Martin on 08.07.2015.
  */
 public class TestClusterRoute implements Route {
-    private ArrayList
+    private ArrayList<UserLocation> ulocs = getFakeLocaction();
     private DataAdapter myAdapter = new DataAdapter() {
         @Override
         public void openDB() {
-
+            ulocs = getFakeLocaction();
         }
 
         @Override
@@ -30,68 +31,84 @@ public class TestClusterRoute implements Route {
         }
 
         @Override
-        public Location saveLocation(Location loc, long timeStamp) {
+        public Location saveLocation(String user, String namespace, Location loc, long timeStamp) {
             return null;
         }
 
         @Override
-        public Location saveLocation(Location loc) {
+        public Location saveLocation(String user, String namespace, Location loc) {
             return null;
         }
 
         @Override
-        public ClusteredLocation saveClusterLocation(Location loc) {
+        public void saveLocations(String user, String namespace, Map<Long, Location> locations) {
+
+        }
+
+        @Override
+        public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc) {
             return null;
         }
 
         @Override
-        public ClusteredLocation saveClusterLocation(Location loc, Dataset ds) {
+        public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc, long timestamp) {
             return null;
         }
 
         @Override
-        public ClusteredLocation updateClusteredLocation(ClusteredLocation updatedLoc) {
+        public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc, Dataset ds) {
             return null;
         }
 
         @Override
-        public ClusteredLocation updateClusteredLocation(ClusteredLocation updatedLoc, Dataset ds) {
+        public ClusteredLocation updateClusteredLocation(String user, String namespace, ClusteredLocation updatedLoc) {
             return null;
         }
 
         @Override
-        public void setClusterIDOfLocations(Dataset ds, long id) {
-
-        }
-
-        @Override
-        public void clearLocationHistory(long since, long until) {
-
-        }
-
-        @Override
-        public void clearClusteredLocations(long since, long until) {
-
-        }
-
-        @Override
-        public List<ClusteredLocation> getAllClusterLocs() {
+        public ClusteredLocation updateClusteredLocation(String user, String namespace, ClusteredLocation updatedLoc, Dataset ds) {
             return null;
         }
 
         @Override
-        public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
+        public void setClusterIDOfLocations(String user, Dataset ds, String namespace, long id) {
+
+        }
+
+        @Override
+        public void clearLocationHistory(String user, long since, String namespace, long until) {
+
+        }
+
+        @Override
+        public void clearClusteredLocations(String user, long since, String namespace, long until) {
+
+        }
+
+        @Override
+        public List<ClusteredLocation> getAllClusterLocs(String user, String namespace) {
             return null;
         }
 
         @Override
-        public List<UserLocation> getUnclusteredHistoryLocs(long since, long until) {
+        public List<UserLocation> getAllHistoryLocs(String user, String namespace,long since, long until, boolean timedescending, boolean onlyUnclustered) {
+            return ulocs;
+        }
+
+        @Override
+        public List<UserLocation> getUnclusteredHistoryLocs(String user, String namespace, long since, long until) {
             return null;
         }
-    }
+
+    };
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
+
+        return ClusterManagement.clusterLocations(myAdapter,new Date(0), new Date(),null,false);
+    }
+    private ArrayList<UserLocation> getFakeLocaction(){
+        ArrayList<UserLocation> ulocs = new ArrayList<UserLocation>();
         Double [][] locations = new Double[10000][2];
         int x = (int) (50.0*1000000.0);
         int y = (int) (8.0*1000000.0);
@@ -102,8 +119,9 @@ public class TestClusterRoute implements Route {
 
             Location loc = new Location(Location.LocationType.ADDRESS, x+((int)(random*1000000)),y+((int)(random2*1000000)));
             UserLocation uloc = new UserLocation(loc,new Date().getTime(), -1);
+            ulocs.add(uloc);
         }
 
-        return null;
+        return ulocs;
     }
 }

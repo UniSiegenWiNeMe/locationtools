@@ -10,122 +10,182 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by lars on 08/07/15.
  */
-public class InfluxConnector implements DataAdapter {
-    String dbURL="http://localhost:8086";
+public class InfluxConnector implements DataAdapter, Route {
+    private String dbURL="http://141.99.14.50:8086";
+    private String dbUser = "root";
+    private String dbPassword = "root";
+    private InfluxDB influxDB;
+    private String dbName = "locations";
 
-    @Override
-    public void openDB() {
 
-    }
-
-    @Override
-    public void closeDB() {
-
-    }
-
-    @Override
-    public Location saveLocation(Location loc, long timeStamp) {
-        return null;
-    }
-
-    @Override
-    public Location saveLocation(Location loc) {
-        return null;
-    }
-
-    @Override
-    public void saveLocations(Map<Long, Location> locations) {
-        InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
+    public InfluxConnector(String dbURL, String dbUser, String dbPassword) {
+        this.dbURL = dbURL;
+        this.dbUser = dbUser;
+        this.dbPassword = dbPassword;
         String dbName = "locations";
-        //influxDB.createDatabase(dbName);
+    }
+
+    public InfluxConnector(){
+    }
+
+    public void finalize() {
+    }
+
+
+    public void openDB() {
+        influxDB = InfluxDBFactory.connect(dbURL, dbUser, dbPassword);
+        if( ! influxDB.describeDatabases().contains(dbName)){
+            influxDB.createDatabase(dbName);
+        }
+    }
+
+    public void closeDB() {
+        influxDB = null;
+    }
+
+    /** Fixme: add user and namespace to */
+    @Override
+    public void saveLocations(String user,String namespace,Map<Long, Location> locations) {
+
         BatchPoints batchPoints = BatchPoints
                 .database(dbName)
                 .retentionPolicy("default")
                 .consistency(InfluxDB.ConsistencyLevel.ALL)
                 .build();
 
-        //loop
+        for (Map.Entry<Long, Location> entry : locations.entrySet())
+        {
+            Point point1 = Point.measurement("rofl")
+                    .time(entry.getKey(), TimeUnit.MILLISECONDS)
+                    .field("lat", entry.getValue().lat).field("long", entry.getValue().lon).tag("namespace", namespace).tag("user", user)
+                    .build();
 
-        Iterator it = locations.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
-            it.remove(); // avoids a ConcurrentModificationException
+            batchPoints.point(point1);
         }
 
-        Point point1 = Point.measurement("Test")
-                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .field("value", 0.66)
-                .build();
 
-        batchPoints.point(point1);
 
         influxDB.write(batchPoints);
 
     }
 
     @Override
-    public ClusteredLocation saveClusterLocation(Location loc) {
+    public Location saveLocation(String user, String namespace, Location loc, long timeStamp) {
         return null;
     }
 
-    @Override
-    public ClusteredLocation saveClusterLocation(Location loc, long timestamp) {
-        return null;
-    }
-
-    @Override
-    public ClusteredLocation saveClusterLocation(Location loc, Dataset ds) {
-        return null;
-    }
-
-    @Override
-    public ClusteredLocation updateClusteredLocation(ClusteredLocation updatedLoc) {
-        return null;
-    }
-
-    @Override
-    public ClusteredLocation updateClusteredLocation(ClusteredLocation updatedLoc, Dataset ds) {
-        return null;
-    }
-
-    @Override
-    public void setClusterIDOfLocations(Dataset ds, long id) {
-
-    }
-
-    @Override
-    public void clearLocationHistory(long since, long until) {
-
-    }
-
-    @Override
-    public void clearClusteredLocations(long since, long until) {
-
-    }
-
-    @Override
-    public List<ClusteredLocation> getAllClusterLocs() {
-        return null;
-    }
-
-    @Override
-    public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
+        @Override
+    public Location saveLocation(String user, String namespace, Location loc) {
         return null;
     }
 
 
     @Override
-    public List<UserLocation> getUnclusteredHistoryLocs(long since, long until) {
+    public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc) {
         return null;
+    }
+
+    @Override
+    public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc, long timestamp) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation saveClusterLocation(String user, String namespace, Location loc, Dataset ds) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation updateClusteredLocation(String user, String namespace, ClusteredLocation updatedLoc) {
+        return null;
+    }
+
+    @Override
+    public ClusteredLocation updateClusteredLocation(String user, String namespace, ClusteredLocation updatedLoc, Dataset ds) {
+        return null;
+    }
+
+    @Override
+    public void setClusterIDOfLocations(String user, Dataset ds, String namespace, long id) {
+
+    }
+
+    @Override
+    public void clearLocationHistory(String user, long since, String namespace, long until) {
+
+    }
+
+    @Override
+    public void clearClusteredLocations(String user, long since, String namespace, long until) {
+
+    }
+
+    /** Fixme: user and namespace are new. */
+    @Override
+    public List<ClusteredLocation> getAllClusterLocs(String user, String namespace) {
+
+    Query query = new Query("SELECT * FROM locations WHERE user = '" + user + "' AND namespace = '" + namespace + "'", dbName);
+    QueryResult queryresult = influxDB.query(query);
+   // queryresult.getResults().get(0).getSeries();
+
+    return null;
+    }
+
+    @Override
+    public List<UserLocation> getAllHistoryLocs(String user,String namespace, long since, long until, boolean timedescending, boolean onlyUnclustered) {
+        return null;
+    }
+
+    @Override
+    public List<UserLocation> getUnclusteredHistoryLocs(String user, String namespace, long since, long until) {
+        return null;
+    }
+
+
+
+
+
+
+
+    // TODO TEST FÜR SAVE
+
+    private Map<Long,Location> getFakeLocaction(){
+        Map<Long,Location> ulocs = new HashMap<Long, Location>() {
+        };
+        Double [][] locations = new Double[10000][2];
+        int x = (int) (50.0*1000000.0);
+        int y = (int) (8.0*1000000.0);
+
+        long time = new Date().getTime();
+        for(int i=0;  i<100; i++){
+            double random = Math.random();
+            double random2 = Math.random();
+
+            Location loc = new Location(Location.LocationType.ADDRESS, x+((int)(random*1000000)),y+((int)(random2*1000000)));
+            ulocs.put(time++, loc);
+        }
+
+        return ulocs;
+    }
+
+
+
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+        openDB();
+        saveLocations("Nico","Test",getFakeLocaction());
+        return "klaus";
+
     }
 }
