@@ -26,6 +26,9 @@ import org.influxdb.dto.Query;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -36,7 +39,7 @@ import java.util.HashMap;
 /**
  * @author Andreas Schildbach
  */
-public final class LocationUtils
+public final class LocationUtils implements Route
 {
 	/**
 	 * @param lat1
@@ -140,30 +143,34 @@ public final class LocationUtils
 			return myXMLHandler.items;
 	}
 
-	public void saveToDB(HashMap<Long,Location> locationsMap) {
-		/*InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:8086", "root", "root");
+	public void saveToDB() {
+		InfluxDB influxDB = InfluxDBFactory.connect("http://141.99.14.50:8086", "root", "root");
 		String dbName = "locations";
-		influxDB.createDatabase(dbName);
+		//influxDB.createDatabase(dbName);
 		BatchPoints batchPoints = BatchPoints
 				.database(dbName)
-				.tag("async", "true")
 				.retentionPolicy("default")
 				.consistency(InfluxDB.ConsistencyLevel.ALL)
 				.build();
 
 		//loop
 
-		Point point1 = Point.measurement("cpu")
+		Point point1 = Point.measurement("Test")
 				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-				.field("idle", 90L).field("user", 9L)
-				.field("system", 1L)
+				.field("value", 0.66)
 				.build();
 
 		batchPoints.point(point1);
 		
 		influxDB.write(batchPoints);
-		Query query = new Query("SELECT idle FROM cpu", dbName);
-		influxDB.query(query);
-		influxDB.deleteDatabase(dbName);*/
+		//Query query = new Query("SELECT idle FROM cpu", dbName);
+		//influxDB.query(query);
+		//influxDB.deleteDatabase(dbName);
+	}
+
+	@Override
+	public Object handle(Request request, Response response) throws Exception {
+		saveToDB();
+		return "klaus";
 	}
 }
