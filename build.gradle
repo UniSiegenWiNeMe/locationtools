@@ -11,6 +11,10 @@ mainClassName = 'de.unisiegen.locationtools.Main'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
+
 }
 
 dependencies {
