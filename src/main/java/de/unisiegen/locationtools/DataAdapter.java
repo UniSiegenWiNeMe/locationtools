@@ -25,7 +25,7 @@ public interface DataAdapter {
         public void clearLocationHistory(long since, long until);
         public void clearClusteredLocations(long since, long until);
         public List<ClusteredLocation> getAllClusterLocs();
-        public List<UserLocation> getAllHistoryLocs(long since, long until, boolean descending);
+        public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered);
         public List<UserLocation> getUnclusteredHistoryLocs(long since, long until);
 
 

@@ -4,6 +4,7 @@ package de.unisiegen.locationtools.cluster;
 
 
 import com.google.gson.Gson;
+import de.unisiegen.locationtools.DataAdapter;
 import de.unisiegen.locationtools.Location;
 import net.sf.javaml.clustering.DensityBasedSpatialClustering;
 import net.sf.javaml.core.Dataset;
@@ -23,51 +24,41 @@ public class ClusterManagement {
     private static Dataset[] resultsCluster;
     private static HashMap<Long, HashMap<Long, Double>> probresult = null;
 
-    public static HashMap<Location, Dataset> clusterLocations(Date since, Date until, Integer max, boolean onlyUnClustered) {
+    public static HashMap<Location, Dataset> clusterLocations(DataAdapter adapter, Date since, Date until, Integer max, boolean onlyUnClustered) {
         HashMap<Location, Dataset> clusterCenters = new HashMap<Location, Dataset>();
 
 
+        List<UserLocation> locs= adapter.getAllHistoryLocs(since.getTime(),until.getTime(),true,onlyUnClustered);
+        System.out.println( "Number of Locations available for clustering:" + locs.size());
         Dataset data = new DefaultDataset();
-
-        List<UserLocation> locs = new ArrayList<UserLocation>();
-        //TODO: initialize locs with location data
-
-          //  Log.d("PTEnabler", "Number of Locations available for clustering:" + locs.size());
-
         if (max != null) {
             int allLocs = locs.size();
             int every = (allLocs > max) ? allLocs / max : 1;
             int i = 0;
             for (UserLocation loc : locs) {
                 if ((i++) % every == 0) {
-//							double[] x= new double[]{((double)(loc.getLoc().lat))/1000000,((double)(loc.getLoc().lon))/1000000};
-//							Instance instance = new DenseInstance(x);
                     data.add(loc);
-                } else {
-                    continue;
                 }
             }
         } else {
             for (UserLocation loc : locs) {
-//					double[] x= new double[]{((double)(loc.getLoc().lat))/1000000,((double)(loc.getLoc().lon))/1000000};
-//					Instance instance = new DenseInstance(x);
                 data.add(loc);
             }
         }
 
-       // Log.d("PTEnabler", "" + data.size() + " Locations initialized for clustering");
+        System.out.println( "" + data.size() + " Locations initialized for clustering");
         int minLocs = Math.max(10, (int) (data.size() * minLocsFactor));
         if (onlyUnClustered) {
             minLocs *= 3;
         }
-       // Log.d("PTEnabler", "" + minLocs + " Locations required for clustering");
+        System.out.println("" + minLocs + " Locations required for clustering");
         DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(distance4Clustering, minLocs, new MyDistanceMeasure());
-     //   Log.d("PTEnabler", "Starting Clustering");
+        System.out.println("Starting Clustering");
 
         resultsCluster = clusterer.cluster(data);
 
 
-       // Log.d("PTEnabler", "Finished Clustering");
+       System.out.println( "Finished Clustering");
         for (Dataset y : resultsCluster) {
             double sumLat = 0.0;
             double sumLon = 0.0;
@@ -90,8 +81,8 @@ public class ClusterManagement {
         return clusterCenters;
     }
 
-    public static HashMap<Location, Dataset> clusterLocations(Date since, Date until, Integer max) {
-        return clusterLocations(since, until, max, false);
+    public static HashMap<Location, Dataset> clusterLocations(DataAdapter adapter, Date since, Date until, Integer max) {
+        return clusterLocations(adapter, since, until, max, false);
     }
 
     public static List<ClusteredLocation> getClusteredLocationsFromCache() {

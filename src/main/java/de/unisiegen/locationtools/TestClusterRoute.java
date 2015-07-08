@@ -2,6 +2,8 @@ package de.unisiegen.locationtools;
 
 import de.unisiegen.locationtools.cluster.ClusterManagement;
 import de.unisiegen.locationtools.cluster.UserLocation;
+import net.sf.javaml.core.Dataset;
+import net.sf.javaml.core.DenseInstance;
 import spark.Request;
 import spark.Response;
 import spark.Route;
