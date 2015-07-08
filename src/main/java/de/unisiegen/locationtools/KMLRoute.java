@@ -10,6 +10,7 @@ import spark.Route;
 public class KMLRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
+
         return "Test";
     }
 }

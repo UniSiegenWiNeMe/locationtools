@@ -32,7 +32,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andreas Schildbach
@@ -128,12 +127,13 @@ public final class LocationUtils
 
 		return (float) (b * A * (sigma - deltaSigma));
 	}
+
 	public HashMap<Long,Location> importLocations(String xml) throws ParserConfigurationException,SAXException,FileNotFoundException,IOException{
 
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 			XMLReader xr = sp.getXMLReader();
-			KMLSAXParser myXMLHandler = new KMLSAXParser();
+			KMLParser myXMLHandler = new KMLParser();
 			xr.setContentHandler(myXMLHandler);
 			xr.parse(new InputSource(new StringReader(xml)));
 			//Log.d("PTEnabler", "Imported " + myXMLHandler.items.size() + " Locations");
