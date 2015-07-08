@@ -3,6 +3,7 @@ package de.unisiegen.locationtools.cluster;
 
 
 
+import com.google.gson.Gson;
 import de.unisiegen.locationtools.Location;
 import net.sf.javaml.clustering.DensityBasedSpatialClustering;
 import net.sf.javaml.core.Dataset;
@@ -115,7 +116,9 @@ public class ClusterManagement {
         Iterator<ClusteredLocation> it = all.iterator();
         while (it.hasNext()) {
             ClusteredLocation cl = it.next();
-            double[] currentLoc = PTNMELocationManager.getLocationLatLng(false);
+            //TODO: Location als Parameter annehmen
+            double[] currentLoc = new double[]{0.0,0.0};
+
             if (currentLoc != null) {
                 double distance = PTNMELocationManager.computeDistance(cl.getLoc(), currentLoc[0], currentLoc[1]);
                 if (distance > distanceInMeter || distance < distance4Clustering) {
@@ -129,12 +132,14 @@ public class ClusterManagement {
     }
 
     public static ClusteredLocation getClosestClusteredLocationsFromCache() {
-        List<ClusteredLocation> all = getClusteredLocationsFromCache();
+        //TODO: Alle ClusteredLocations holen
+        List<ClusteredLocation> all = new ArrayList<ClusteredLocation>();
         ClusteredLocation res = null;
-        double[] locations = PTNMELocationManager.getLocationLatLng(false);
+        //TODO: Location als Parameter annehmen
+        double[] locations = new double[]{0.0,0.0};
         if (locations != null) {
-            double x = PTNMELocationManager.getLocationLatLng(false)[0];
-            double y = PTNMELocationManager.getLocationLatLng(false)[1];
+            double x = locations[0];
+            double y = locations[1];
             double mindistance = Double.MAX_VALUE;
             Iterator<ClusteredLocation> it = all.iterator();
             while (it.hasNext()) {
@@ -216,7 +221,8 @@ public class ClusterManagement {
         if (probresult == null) {
             HashMap<Integer, ClusteredLocation> probLoc = new HashMap<Integer, ClusteredLocation>();
             TreeSet<UserLocation> ulocs = new TreeSet<UserLocation>();
-            ulocs.addAll(Utilities.openDBConnection().getAllHistoryLocs(0, new Date().getTime(), false));
+            // TODO: ALle Locations holen, die für Übergangswahrscheinlihckeit relevant
+            //ulocs.addAll(Utilities.openDBConnection().getAllHistoryLocs(0, new Date().getTime(), false));
 
             // All IDs of currently available cluster
             Vector<Long> cids = new Vector<Long>();
@@ -280,8 +286,7 @@ public class ClusterManagement {
             TreeSet<PropableNextLocationResult> results = new TreeSet<PropableNextLocationResult>();
             for (ClusteredLocation cloc : clocations) {
                 if (currentCluster.keySet().contains(cloc.getId())) {
-                    Location currentGeoPos = PTNMELocationManager.getLocation(false);
-                    if ((currentGeoPos != null && PTNMELocationManager.computeDistance(cloc.getLoc(), currentGeoPos) > distance4Clustering) || includeCurrent)
+
                         results.add(new PropableNextLocationResult(currentCluster.get(cloc.getId()), cloc));
                 }
             }
@@ -297,7 +302,8 @@ public class ClusterManagement {
     }
 
     public static Set<PropableNextLocationResult> getPropableLocationForDate(Date x, boolean includeCurPosCluster) {
-        List<UserLocation> all = Utilities.openDBConnection().getAllHistoryLocs(0, new Date().getTime());
+        // TODO: ALle Locations holen, die für Übergangswahrscheinlihckeit relevant
+        List<UserLocation> all = new ArrayList<UserLocation>();//Utilities.openDBConnection().getAllHistoryLocs(0, new Date().getTime());
         Calendar toLookFor = Calendar.getInstance();
         toLookFor.setTimeInMillis(x.getTime());
         Calendar loccal = Calendar.getInstance();
@@ -339,15 +345,9 @@ public class ClusterManagement {
         TreeSet<PropableNextLocationResult> res = new TreeSet<PropableNextLocationResult>();
         for (ClusteredLocation cloc : getClusteredLocationsFromCache()) {
             if (props.keySet().contains(cloc.getId())) {
-                double[] currentLoc = PTNMELocationManager.getLocationLatLng(false);
-                double dist = Double.MAX_VALUE;
-                if (currentLoc != null) {
-                    dist = PTNMELocationManager.computeDistance(cloc.getLoc(), currentLoc[0], currentLoc[1]);
-                }
 
-                if (dist > distance4Clustering || includeCurPosCluster) {
                     res.add(new PropableNextLocationResult(props.get(cloc.getId()), cloc));
-                }
+
             }
         }
 

@@ -10,8 +10,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import de.unisiegen.locationtools.Location;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 
 
 
