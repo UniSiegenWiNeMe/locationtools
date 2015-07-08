@@ -91,7 +91,7 @@ public class TestClusterRoute implements Route {
         }
 
         @Override
-        public List<UserLocation> getAllHistoryLocs(long since, long until, boolean timedescending, boolean onlyUnclustered) {
+        public List<UserLocation> getAllHistoryLocs(String user, String namespace,long since, long until, boolean timedescending, boolean onlyUnclustered) {
             return ulocs;
         }
 
