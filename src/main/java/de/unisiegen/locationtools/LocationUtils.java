@@ -18,19 +18,7 @@
 package de.unisiegen.locationtools;
 
 
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.BatchPoints;
-import org.influxdb.dto.Point;
-import org.influxdb.dto.Query;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -128,17 +116,7 @@ public final class LocationUtils
 		return (float) (b * A * (sigma - deltaSigma));
 	}
 
-	public HashMap<Long,Location> importLocations(String xml) throws ParserConfigurationException,SAXException,FileNotFoundException,IOException{
 
-			SAXParserFactory spf = SAXParserFactory.newInstance();
-			SAXParser sp = spf.newSAXParser();
-			XMLReader xr = sp.getXMLReader();
-			KMLParser myXMLHandler = new KMLParser();
-			xr.setContentHandler(myXMLHandler);
-			xr.parse(new InputSource(new StringReader(xml)));
-			//Log.d("PTEnabler", "Imported " + myXMLHandler.items.size() + " Locations");
-			return myXMLHandler.items;
-	}
 
 	public void saveToDB(HashMap<Long,Location> locationsMap) {
 		/*InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:8086", "root", "root");
