@@ -107,6 +107,7 @@ public class TestClusterRoute implements Route {
 
         return ClusterManagement.clusterLocations(myAdapter,new Date(0), new Date(),null,false);
     }
+
     private ArrayList<UserLocation> getFakeLocaction(){
         ArrayList<UserLocation> ulocs = new ArrayList<UserLocation>();
         Double [][] locations = new Double[10000][2];

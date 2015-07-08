@@ -17,6 +17,7 @@ import spark.Route;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * Created by lars on 08/07/15.
@@ -66,7 +67,7 @@ public class InfluxConnector implements DataAdapter {
 
         for (Map.Entry<Long, Location> entry : locations.entrySet())
         {
-            Point point1 = Point.measurement("Loci")
+            Point point1 = Point.measurement("Loca")
                     .time(entry.getKey(), TimeUnit.MILLISECONDS)
                     .field("lat", entry.getValue().lat).field("long", entry.getValue().lon).tag("namespace", namespace).tag("user", user)
                     .build();
@@ -137,9 +138,10 @@ public class InfluxConnector implements DataAdapter {
 
     Query query = new Query("SELECT * FROM locations WHERE user = '" + user + "' AND namespace = '" + namespace + "'", dbName);
     QueryResult queryresult = influxDB.query(query);
-   // queryresult.getResults().get(0).getSeries();
-
-    return null;
+    // queryresult.getResults().get(0).getSeries();
+    //queryresult.getResults().stream().map((Function<QueryResult.Result, Void>) System.err::println);
+        System.out.println(queryresult);
+        return null;
     }
 
     @Override
