@@ -20,6 +20,9 @@ package de.unisiegen.locationtools;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.BatchPoints;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -29,6 +32,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andreas Schildbach
@@ -144,7 +148,7 @@ public final class LocationUtils
 				.database(dbName)
 				.tag("async", "true")
 				.retentionPolicy("default")
-				.consistency(ConsistencyLevel.ALL)
+				.consistency(InfluxDB.ConsistencyLevel.ALL)
 				.build();
 
 		//loop
@@ -156,7 +160,7 @@ public final class LocationUtils
 				.build();
 
 		batchPoints.point(point1);
-		batchPoints.point(point2);
+		
 		influxDB.write(batchPoints);
 		Query query = new Query("SELECT idle FROM cpu", dbName);
 		influxDB.query(query);
