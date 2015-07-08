@@ -26,6 +26,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
+import java.util.HashMap;
 
 /**
  * @author Andreas Schildbach
@@ -121,8 +122,8 @@ public final class LocationUtils
 
 		return (float) (b * A * (sigma - deltaSigma));
 	}
-	public boolean importLocations(String xml){
-		try{
+	public HashMap<Long,Location> importLocations(String xml) throws ParserConfigurationException,SAXException,FileNotFoundException,IOException{
+
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 			XMLReader xr = sp.getXMLReader();
@@ -130,16 +131,9 @@ public final class LocationUtils
 			xr.setContentHandler(myXMLHandler);
 			xr.parse(new InputSource(new StringReader(xml)));
 			//Log.d("PTEnabler", "Imported " + myXMLHandler.items.size() + " Locations");
-		}catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			return myXMLHandler.items;
 
-		return false;
+
+
 	}
 }
