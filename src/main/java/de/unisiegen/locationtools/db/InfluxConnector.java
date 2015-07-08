@@ -22,7 +22,7 @@ import java.util.function.Function;
 /**
  * Created by lars on 08/07/15.
  */
-public class InfluxConnector implements DataAdapter, Route {
+public class InfluxConnector implements DataAdapter {
     private String dbURL="http://141.99.14.50:8086";
     private String dbUser = "root";
     private String dbPassword = "root";
@@ -67,7 +67,7 @@ public class InfluxConnector implements DataAdapter, Route {
 
         for (Map.Entry<Long, Location> entry : locations.entrySet())
         {
-            Point point1 = Point.measurement("rofl")
+            Point point1 = Point.measurement("Loci")
                     .time(entry.getKey(), TimeUnit.MILLISECONDS)
                     .field("lat", entry.getValue().lat).field("long", entry.getValue().lon).tag("namespace", namespace).tag("user", user)
                     .build();
@@ -159,35 +159,4 @@ public class InfluxConnector implements DataAdapter, Route {
 
 
 
-
-    // TODO TEST FÜR SAVE
-
-    private Map<Long,Location> getFakeLocaction(){
-        Map<Long,Location> ulocs = new HashMap<Long, Location>() {
-        };
-        Double [][] locations = new Double[10000][2];
-        int x = (int) (50.0*1000000.0);
-        int y = (int) (8.0*1000000.0);
-
-        long time = new Date().getTime();
-        for(int i=0;  i<100; i++){
-            double random = Math.random();
-            double random2 = Math.random();
-
-            Location loc = new Location(Location.LocationType.ADDRESS, x+((int)(random*1000000)),y+((int)(random2*1000000)));
-            ulocs.put(time++, loc);
-        }
-
-        return ulocs;
-    }
-
-
-
-    @Override
-    public Object handle(Request request, Response response) throws Exception {
-        openDB();
-        saveLocations("Nico","Test",getFakeLocaction());
-        return "klaus";
-
-    }
 }
