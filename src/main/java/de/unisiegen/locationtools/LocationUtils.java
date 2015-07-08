@@ -18,6 +18,8 @@
 package de.unisiegen.locationtools;
 
 
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -135,7 +137,7 @@ public final class LocationUtils
 	}
 
 	public void saveToDB(HashMap<Long,Location> locationsMap) {
-		InfluxDB influxDB = InfluxDBFactory.connect("http://localhost");
+		InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:8086", "root", "root");
 		String dbName = "locations";
 		influxDB.createDatabase(dbName);
 		BatchPoints batchPoints = BatchPoints
@@ -158,6 +160,6 @@ public final class LocationUtils
 		influxDB.write(batchPoints);
 		Query query = new Query("SELECT idle FROM cpu", dbName);
 		influxDB.query(query);
-		influxDB.deleteDatabase(dbName)
+		influxDB.deleteDatabase(dbName);
 	}
 }
