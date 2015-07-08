@@ -25,17 +25,17 @@ public class InfluxConnector implements DataAdapter {
     private String dbUser = "root";
     private String dbPassword = "root";
     private InfluxDB influxDB;
-    private String dbName;
+    private String dbName = "locations";
 
 
-    InfluxConnector(String dbURL, String dbUser, String dbPassword) {
+    public InfluxConnector(String dbURL, String dbUser, String dbPassword) {
         this.dbURL = dbURL;
         this.dbUser = dbUser;
         this.dbPassword = dbPassword;
         String dbName = "locations";
     }
 
-    InfluxConnector(){
+    public InfluxConnector(){
     }
 
     public void finalize() {
