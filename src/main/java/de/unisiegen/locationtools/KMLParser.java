@@ -12,17 +12,14 @@ import java.util.HashMap;
 import java.util.Vector;
 
 
-
 /**
  * Created by Martin on 24.06.2015.
  */
-public class KMLSAXParser extends DefaultHandler {
+public class KMLParser extends DefaultHandler {
     Boolean currentElement = false;
     String currentValue = "";
-    public HashMap<Long,Location> items = null;
-    private long currentdate= 0;
-
-
+    public HashMap<Long, Location> items = null;
+    private long currentdate = 0;
 
 
     // Called when tag starts
@@ -33,8 +30,8 @@ public class KMLSAXParser extends DefaultHandler {
         if (localName.equals("Track")) {
             items = new HashMap<Long, Location>();
         }
-        if(localName.equals("when") || localName.equals("coord")){
-            currentValue ="";
+        if (localName.equals("when") || localName.equals("coord")) {
+            currentValue = "";
         }
 
     }
@@ -48,7 +45,7 @@ public class KMLSAXParser extends DefaultHandler {
 
         /** set value */
         if (localName.equalsIgnoreCase("when")) {
-            DateTimeFormatter parser    = ISODateTimeFormat.dateTimeParser();
+            DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
             DateTime date = parser.parseDateTime(currentValue);
             currentdate = date.getMillis();
         } else if (localName.equalsIgnoreCase("coord")) {
@@ -60,10 +57,11 @@ public class KMLSAXParser extends DefaultHandler {
             items.put(currentdate, loc);
         }
     }
+
     // Called to get tag characters
     @Override
     public void characters(char[] ch, int start, int length)
             throws SAXException {
-            currentValue = currentValue +  new String(ch, start, length);
+        currentValue = currentValue + new String(ch, start, length);
     }
 }
