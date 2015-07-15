@@ -2,6 +2,8 @@ package de.unisiegen.sensortools.db;
 
 import de.unisiegen.sensortools.Location;
 import de.unisiegen.sensortools.cluster.ClusteredLocation;
+import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
+import de.unisiegen.sensortools.cluster.sensors.PowerMeasurement;
 import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 
 import net.sf.javaml.core.Dataset;
@@ -148,10 +150,7 @@ public class InfluxConnector implements DataAdapter {
         QueryResult queryresult = influxDB.query(query);
         for(int i = 0;i<queryresult.getResults().get(0).getSeries().get(0).getValues().size();i++) {
             allHistoricalLocs.add(new UserLocation(new Location(Location.LocationType.ADDRESS,(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)).intValue(),(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(2)).intValue()),(new DateTime((String)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime(),-1));
-            //System.out.println();
         }
-
-
         return allHistoricalLocs;
     }
 
@@ -160,9 +159,24 @@ public class InfluxConnector implements DataAdapter {
         return null;
     }
 
-
-
-
+    @Override
+    public List<PowerMeasurement> getHistoryConsumption(String user, String namespace, String type, long from, long to) {
+        List<PowerMeasurement> allHistoricalCon = new ArrayList();
+        Query query = new Query("SELECT * FROM power WHERE device='"+type+"' AND time>now() - 2000m AND time < now()", dbName);
+        QueryResult queryresult = influxDB.query(query);
+        for(int i = 0;i<queryresult.getResults().get(0).getSeries().get(0).getValues().size();i++) {
+            //allHistoricalCon.add(new AbstractMeasurement();
+            PowerMeasurement currentPowMes = new PowerMeasurement();
+            ArrayList<Object> list = new ArrayList<>();
+            list.add(((Double) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)));
+            currentPowMes.setValues(list);
+            currentPowMes.setStart((new DateTime((String) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime());
+            currentPowMes.setEnd((new DateTime((String) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime());
+            allHistoricalCon.add(currentPowMes);
+            //System.out.println(((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)).doubleValue());
+        }
+        return allHistoricalCon;
+    }
 
 
 }
