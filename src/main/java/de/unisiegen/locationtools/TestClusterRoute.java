@@ -9,10 +9,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Martin on 08.07.2015.
@@ -104,8 +101,12 @@ public class TestClusterRoute implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-
-        return ClusterManagement.clusterLocations(myAdapter,new Date(0), new Date(),null,false);
+        HashMap<Location,Dataset> clusters = ClusterManagement.clusterLocations(myAdapter,new Date(0), new Date(),null,false);
+        String x = "Clusters found: " + clusters.size();
+        for(Location loc: clusters.keySet()){
+            x+="\n"+loc.lat+ " "+ loc.lon + " Location belonging to cluster:" + clusters.get(loc).size();
+        }
+        return x;
     }
     private ArrayList<UserLocation> getFakeLocaction(){
         ArrayList<UserLocation> ulocs = new ArrayList<UserLocation>();
@@ -113,11 +114,11 @@ public class TestClusterRoute implements Route {
         int x = (int) (50.0*1000000.0);
         int y = (int) (8.0*1000000.0);
 
-        for(int i=0;  i<1000000; i++){
+        for(int i=0;  i<1000; i++){
             double random = Math.random();
             double random2 = Math.random();
 
-            Location loc = new Location(Location.LocationType.ADDRESS, x+((int)(random*1000000)),y+((int)(random2*1000000)));
+            Location loc = new Location(Location.LocationType.ADDRESS, x+((int)(random*1000)),y+((int)(random2*1000)));
             UserLocation uloc = new UserLocation(loc,new Date().getTime(), -1);
             ulocs.add(uloc);
         }
