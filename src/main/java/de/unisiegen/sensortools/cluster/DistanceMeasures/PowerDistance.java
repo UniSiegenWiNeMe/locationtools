@@ -1,4 +1,4 @@
-package de.unisiegen.sensortools.cluster.DistanceMeasures;
+package de.unisiegen.sensortools.cluster.distanceMeasures;
 
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;

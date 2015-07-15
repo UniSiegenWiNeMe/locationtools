@@ -1,9 +1,13 @@
 package de.unisiegen.sensortools;
 
 import de.unisiegen.sensortools.cluster.ClusterManagement;
+import de.unisiegen.sensortools.cluster.distanceMeasures.PowerDistance;
+import de.unisiegen.sensortools.cluster.sensors.PowerMeasurement;
 import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 import de.unisiegen.sensortools.db.DataAdapter;
+import net.sf.javaml.clustering.DensityBasedSpatialClustering;
 import net.sf.javaml.core.Dataset;
+import net.sf.javaml.core.DefaultDataset;
 import org.xml.sax.SAXException;
 import spark.Request;
 import spark.Response;
@@ -109,14 +113,26 @@ public class TestClusterRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         //ulocs = getFakeLocaction(request);
-
+/*
         HashMap<Location,Dataset> clusters = ClusterManagement.clusterLocations(myAdapter,new Date(0), new Date(),null,false);
         String x = "Clusters found: " + clusters.size();
         for(Location loc: clusters.keySet()){
             x+="\n"+loc.lat+ " "+ loc.lon + " Location belonging to cluster:" + clusters.get(loc).size();
             x+="\nhttp://maps.google.com/?ie=UTF8&hq=&ll="+((double)loc.lat)/1000000 +","+((double)loc.lon)/1000000+"&z=13";
         }
-        return x;
+        return x;*/
+
+        List<PowerMeasurement> powerValues = myAdapter.getHistoryConsumption("namespace", "user", "Papier Drucker 3D Raum", 0, 0);
+
+        Dataset data = new DefaultDataset();
+        for(int i = 0;i<powerValues.size();i++) {
+            data.add(powerValues.get(i));
+        }
+
+        Dataset[] resultsCluster;
+        DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(10, 5, new PowerDistance());
+        resultsCluster = clusterer.cluster(data);
+        return resultsCluster;
     }
 
     private ArrayList<UserLocation> getFakeLocaction(Request request){

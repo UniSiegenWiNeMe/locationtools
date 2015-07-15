@@ -2,6 +2,8 @@ package de.unisiegen.sensortools.db;
 
 import de.unisiegen.sensortools.Location;
 import de.unisiegen.sensortools.cluster.ClusteredLocation;
+import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
+import de.unisiegen.sensortools.cluster.sensors.PowerMeasurement;
 import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 import net.sf.javaml.core.Dataset;
 
@@ -31,6 +33,7 @@ public interface DataAdapter {
         public List<ClusteredLocation> getAllClusterLocs(String user,String namespace);
         public List<UserLocation> getAllHistoryLocs(String user,String namespace,long since, long until, boolean timedescending, boolean onlyUnclustered);
         public List<UserLocation> getUnclusteredHistoryLocs(String user,String namespace,long since, long until);
+        public List<PowerMeasurement> getHistoryConsumption(String user,String namespace,String type, long from, long to);
 
 
 
