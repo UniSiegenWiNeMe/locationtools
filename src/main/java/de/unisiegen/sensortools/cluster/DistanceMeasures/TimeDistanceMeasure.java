@@ -10,6 +10,7 @@ public class TimeDistanceMeasure implements DistanceMeasure {
 
     @Override
     public double measure(Instance instance, Instance instance1) {
+       // if(instance instanceof )
         return 0;
     }
 

@@ -1,18 +1,22 @@
 package de.unisiegen.sensortools.cluster.sensors;
 
+import net.sf.javaml.core.AbstractInstance;
+import net.sf.javaml.core.DenseInstance;
+
 import java.util.Collection;
 import java.util.Map;
 
 /**
  * Created by Martin on 15.07.2015.
  */
-public abstract class AbstractMeasurement {
+public abstract class AbstractMeasurement extends AbstractInstance{
     private String name;
 
 
     private Map<String, String> tags;
     private long start;
     private long end;
+
     public String getName(){
         return name;
     };
