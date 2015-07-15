@@ -39,6 +39,37 @@ public abstract class AbstractMeasurement extends DenseInstance{
     public long getEnd(){
         return end;
     };
+
+    /** Default getter, just insert key that stored the value.
+     *
+     * @param key
+     * @return
+     */
+    public String getValue(String key) {
+        return tags.get(key);
+    }
+
+    /** Default setter of key-value pair, Just add water.
+     *
+     * @param key
+     * @param value
+     */
+    public void setValue(String key, String value) {
+        tags.put(key,value);
+    }
+
+    /** Default deletion function for internal store. Returns the contained value.
+     * Todo: Add exception for key unknown.
+     *
+     * @param key
+     * @return
+     */
+    public String removeValue(String key){
+        String val = tags.get(key);
+        tags.remove(key);
+        return val;
+    }
+
     public abstract Collection<Object> getValues();
     public abstract Collection<Object> setValues(Collection<Object> values);
     public abstract Map<String, String> getTags();
