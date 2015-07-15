@@ -18,7 +18,7 @@ public class PowerMeasurement extends AbstractMeasurement implements Comparable 
     }
 
     @Override
-    public Collection<Object> setValues(Collection<Double> values) {
+    public Collection<Object> setValues(Collection<Object> values) {
         return null;
     }
 
