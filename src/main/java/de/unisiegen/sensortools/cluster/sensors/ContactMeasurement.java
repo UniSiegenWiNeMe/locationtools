@@ -1,6 +1,11 @@
 package de.unisiegen.sensortools.cluster.sensors;
 
+import de.unisiegen.sensortools.cluster.DistanceMeasures.EqualityDistance;
+import net.sf.javaml.core.Instance;
+import net.sf.javaml.distance.DistanceMeasure;
+
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -49,13 +54,32 @@ public class ContactMeasurement extends AbstractMeasurement implements Comparabl
 
     }
 
+    /** Equality if start, end and all fields are equal.
+     *
+     * @param other
+     * @return
+     */
+    public boolean equals(ContactMeasurement other) {
+        if (! getTags().keySet().equals(other.getTags().keySet()))
+            return false;
+        for (Iterator<String> keys = getTags().keySet().iterator();
+            keys.hasNext();  ) {
+            String k = keys.next();
+            if (!this.getValue(k).equals(other.getValue(k)))
+                return false;
+        }
+        return getStart() == other.getStart()
+                && getEnd() == other.getEnd();
+    }
+
     /**
      *
      * @param o
      * @return
      */
     @Override
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(Object other) {
+        DistanceMeasure distance = new EqualityDistance();
+        return (int) distance.measure(this, (Instance) other);
     }
 }
