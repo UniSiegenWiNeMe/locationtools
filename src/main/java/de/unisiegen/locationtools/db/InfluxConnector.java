@@ -11,6 +11,7 @@ import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
+import org.joda.time.DateTime;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -67,14 +68,14 @@ public class InfluxConnector implements DataAdapter {
 
         for (Map.Entry<Long, Location> entry : locations.entrySet())
         {
-            Point point1 = Point.measurement("Loca")
+            Point point1 = Point.measurement("KMLLocation")
                     .time(entry.getKey(), TimeUnit.MILLISECONDS)
                     .field("lat", entry.getValue().lat).field("long", entry.getValue().lon).tag("namespace", namespace).tag("user", user)
                     .build();
-
             batchPoints.point(point1);
         }
 
+        System.out.println(batchPoints);
 
 
         influxDB.write(batchPoints);
@@ -146,7 +147,16 @@ public class InfluxConnector implements DataAdapter {
 
     @Override
     public List<UserLocation> getAllHistoryLocs(String user,String namespace, long since, long until, boolean timedescending, boolean onlyUnclustered) {
-        return null;
+        List<UserLocation> allHistoricalLocs = new ArrayList();
+        Query query = new Query("SELECT * FROM KMLLocation", dbName);
+        QueryResult queryresult = influxDB.query(query);
+        for(int i = 0;i<queryresult.getResults().get(0).getSeries().get(0).getValues().size();i++) {
+            allHistoricalLocs.add(new UserLocation(new Location(Location.LocationType.ADDRESS,(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)).intValue(),(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(2)).intValue()),(new DateTime((String)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime(),1));
+            //System.out.println();
+        }
+
+
+        return allHistoricalLocs;
     }
 
     @Override
