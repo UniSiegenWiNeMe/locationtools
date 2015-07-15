@@ -3,10 +3,9 @@ package de.unisiegen.sensortools.cluster.sensors;
 import de.unisiegen.sensortools.cluster.DistanceMeasures.EqualityDistance;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Measure Contact Events (i.e. meeting people).
@@ -34,24 +33,27 @@ public class ContactMeasurement extends AbstractMeasurement implements Comparabl
 
     @Override
     public Collection<Object> getValues() {
-
-        return null;
+        return new ArrayList<>(this.tags.values());
     }
 
     @Override
     public Collection<Object> setValues(Collection<Object> values) {
-        return null;
+        throw new NotImplementedException();
     }
 
 
     @Override
     public Map<String, String> getTags() {
-        return null;
+        return new HashMap<String,String>(this.tags);
     }
 
     @Override
     public void setTags(Map<String, String> tags) {
-
+        Iterator<String> keys = tags.keySet().iterator();
+        while(keys.hasNext()) {
+            String k = keys.next();
+            this.setValue(k,tags.get(k));
+        }
     }
 
     /** Equality if start, end and all fields are equal.
