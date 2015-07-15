@@ -9,13 +9,17 @@ import java.util.Map;
 /**
  * Created by Martin on 15.07.2015.
  */
-public abstract class AbstractMeasurement extends AbstractInstance{
+public abstract class AbstractMeasurement extends DenseInstance{
     private String name;
 
 
     private Map<String, String> tags;
     private long start;
     private long end;
+
+    public AbstractMeasurement(double[] att) {
+        super(att);
+    }
 
     public String getName(){
         return name;
