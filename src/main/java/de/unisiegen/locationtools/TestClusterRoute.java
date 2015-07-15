@@ -108,6 +108,7 @@ public class TestClusterRoute implements Route {
         }
         return x;
     }
+
     private ArrayList<UserLocation> getFakeLocaction(){
         ArrayList<UserLocation> ulocs = new ArrayList<UserLocation>();
         Double [][] locations = new Double[10000][2];

@@ -20,7 +20,7 @@ public class KMLRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         KMLParser parser = new KMLParser();
         HashMap<Long,Location> locations = parser.parseLocations(request.body());
-        adapter.saveLocations((String)request.attribute("user"), (String)request.attribute("namespace"), locations);
+        adapter.saveLocations((String)request.queryParams("user"), (String)request.queryParams("namespace"), locations);
         return locations.keySet().size() + " Locations added";
     }
 }
