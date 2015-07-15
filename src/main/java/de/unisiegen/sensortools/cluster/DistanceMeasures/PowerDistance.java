@@ -6,14 +6,7 @@ import net.sf.javaml.distance.DistanceMeasure;
 /**
  * Created by Matthias Betz on 15.07.2015.
  */
-public class PowerDistance implements DistanceMeasure, Comparable {
-
-    //Comparable
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
-
+public class PowerDistance implements DistanceMeasure {
 
     //DistanceMeasure
     @Override

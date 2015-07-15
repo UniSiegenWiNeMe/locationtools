@@ -16,7 +16,6 @@ public class TimeDistanceMeasure implements DistanceMeasure {
            AbstractMeasurement measurement1 = (AbstractMeasurement) instance;
            AbstractMeasurement measurement2 =(AbstractMeasurement) instance1;
            DateTime dt1 = new DateTime();
-           dt1
 
 
 
