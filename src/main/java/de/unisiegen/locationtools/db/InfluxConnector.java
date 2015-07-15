@@ -151,7 +151,7 @@ public class InfluxConnector implements DataAdapter {
         Query query = new Query("SELECT * FROM KMLLocation", dbName);
         QueryResult queryresult = influxDB.query(query);
         for(int i = 0;i<queryresult.getResults().get(0).getSeries().get(0).getValues().size();i++) {
-            allHistoricalLocs.add(new UserLocation(new Location(Location.LocationType.ADDRESS,(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)).intValue(),(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(2)).intValue()),(new DateTime((String)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime(),1));
+            allHistoricalLocs.add(new UserLocation(new Location(Location.LocationType.ADDRESS,(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)).intValue(),(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(2)).intValue()),(new DateTime((String)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime(),-1));
             //System.out.println();
         }
 
