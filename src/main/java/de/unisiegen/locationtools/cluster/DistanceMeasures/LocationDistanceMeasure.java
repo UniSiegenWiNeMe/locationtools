@@ -1,8 +1,12 @@
-package de.unisiegen.locationtools.cluster;
+package de.unisiegen.locationtools.cluster.DistanceMeasures;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;
 
-class MyDistanceMeasure implements DistanceMeasure{
+public class LocationDistanceMeasure implements DistanceMeasure{
+	public  double minLocsFactor;
+	public  int distance4Clustering;
+	public static double DEFAULT_MIN_LOCS_FACTOR = 0.03;
+	public static int DEFAULT_DISTANCE_4_CLUSTERING = 25;
 
 
 
@@ -10,7 +14,14 @@ class MyDistanceMeasure implements DistanceMeasure{
 	 * 
 	 */
 	private static final long serialVersionUID = -1994288737634809277L;
-
+	public LocationDistanceMeasure(){
+		this.minLocsFactor = DEFAULT_MIN_LOCS_FACTOR;
+		this.distance4Clustering = DEFAULT_DISTANCE_4_CLUSTERING;
+	}
+	public LocationDistanceMeasure(double minLocsFactor, int distance4Clustering){
+		this.minLocsFactor = minLocsFactor;
+		this.distance4Clustering = distance4Clustering;
+	}
 	@Override
 	public boolean compare(double arg0, double arg1) {
 		if(arg0>=arg1){

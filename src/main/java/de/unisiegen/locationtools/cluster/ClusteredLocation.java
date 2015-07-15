@@ -148,7 +148,7 @@ public class ClusteredLocation implements Comparable<ClusteredLocation>, Seriali
                     probdata.add(pnlr.getCloc());
                 }
             }else{
-               List<ClusteredLocation> locs = ClusterManagement.getCloseByClusteredLocationsFromCache(5000);
+               List<ClusteredLocation> locs = ClusterManagement.getCloseByClusteredLocationsFromCache(Double.MAX_VALUE, new Location(Location.LocationType.ADDRESS,50*1000000,8*1000000));
 
                 for(ClusteredLocation pnlr:locs){
                     probdata.add(pnlr);

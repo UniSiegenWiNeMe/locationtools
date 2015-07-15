@@ -5,6 +5,7 @@ package de.unisiegen.locationtools.cluster;
 
 import com.google.gson.Gson;
 import de.unisiegen.locationtools.Location;
+import de.unisiegen.locationtools.cluster.DistanceMeasures.LocationDistanceMeasure;
 import de.unisiegen.locationtools.db.DataAdapter;
 import net.sf.javaml.clustering.DensityBasedSpatialClustering;
 import net.sf.javaml.core.Dataset;
@@ -19,8 +20,7 @@ import java.util.*;
  * Created by Martin on 05.03.2015.
  */
 public class ClusterManagement {
-    private static double minLocsFactor = 0.03;
-    private static int distance4Clustering = 25;
+
     private static Dataset[] resultsCluster;
     private static HashMap<Long, HashMap<Long, Double>> probresult = null;
 
@@ -47,12 +47,14 @@ public class ClusterManagement {
         }
 
         System.out.println( "" + data.size() + " Locations initialized for clustering");
-        int minLocs = Math.max(10, (int) (data.size() * minLocsFactor));
+        LocationDistanceMeasure ldm = new LocationDistanceMeasure(0.03,25);
+        int minLocs = Math.max(10, (int) (data.size() * ldm.minLocsFactor));
         if (onlyUnClustered) {
             minLocs *= 3;
         }
+
         System.out.println("" + minLocs + " Locations required for clustering");
-        DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(distance4Clustering, minLocs, new MyDistanceMeasure());
+        DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(ldm.distance4Clustering, minLocs,ldm);
         System.out.println("Starting Clustering");
 
         resultsCluster = clusterer.cluster(data);
@@ -102,17 +104,16 @@ public class ClusterManagement {
     return res;
     }
 
-    public static List<ClusteredLocation> getCloseByClusteredLocationsFromCache(double distanceInMeter) {
+    public static List<ClusteredLocation> getCloseByClusteredLocationsFromCache(double maxDistanceInMeter, Location currentLoc) {
         List<ClusteredLocation> all = getClusteredLocationsFromCache();
         Iterator<ClusteredLocation> it = all.iterator();
         while (it.hasNext()) {
             ClusteredLocation cl = it.next();
-            //TODO: Location als Parameter annehmen
-            double[] currentLoc = new double[]{0.0,0.0};
+
 
             if (currentLoc != null) {
-                double distance = PTNMELocationManager.computeDistance(cl.getLoc(), currentLoc[0], currentLoc[1]);
-                if (distance > distanceInMeter || distance < distance4Clustering) {
+                double distance = PTNMELocationManager.computeDistance(cl.getLoc(),currentLoc);
+                if (distance > maxDistanceInMeter) {
                     it.remove();
                 }
             }
@@ -156,7 +157,7 @@ public class ClusterManagement {
             List<ClusteredLocation> oldClusteredLocs = getClusteredLocationsFromCache();
             for (ClusteredLocation oldLoc : oldClusteredLocs) {
                 double distance = PTNMELocationManager.computeDistance(loc, oldLoc.getLoc());
-                if (distance < (2*distance4Clustering)) {
+                if (distance < (2*LocationDistanceMeasure.DEFAULT_DISTANCE_4_CLUSTERING)) {
                     toAdd = oldLoc;
                     break;
                 }
