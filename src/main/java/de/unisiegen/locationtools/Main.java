@@ -12,7 +12,6 @@ public class Main {
     public static void main(String[] args) {
         DataAdapter influxDb = new InfluxConnector();
         influxDb.openDB();
-        influxDb.getAllHistoryLocs("rofl","lol",10000,999999999,false,false);
         get("/hello", (req, res) -> "Hello World");
         post("/kml", new KMLRoute(influxDb));
         get("/testFake", new TestClusterRoute());
