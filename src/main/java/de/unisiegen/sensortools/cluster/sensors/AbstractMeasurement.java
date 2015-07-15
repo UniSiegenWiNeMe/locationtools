@@ -32,6 +32,19 @@ public abstract class AbstractMeasurement {
     public long getEnd(){
         return end;
     };
+
+    public String getValue(String key) {
+        return tags.get(key);
+    }
+    public void setValue(String key, String value) {
+        tags.put(key,value);
+    }
+    public String removeValue(String key){
+        String val = tags.get(key);
+        tags.remove(key);
+        return val;
+    }
+
     public abstract Collection<Object> getValues();
     public abstract Collection<Object> setValues(Collection<Object> values);
     public abstract Map<String, String> getTags();
