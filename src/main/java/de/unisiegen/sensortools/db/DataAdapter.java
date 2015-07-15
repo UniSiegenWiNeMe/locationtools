@@ -1,8 +1,8 @@
-package de.unisiegen.locationtools.db;
+package de.unisiegen.sensortools.db;
 
-import de.unisiegen.locationtools.Location;
-import de.unisiegen.locationtools.cluster.ClusteredLocation;
-import de.unisiegen.locationtools.cluster.UserLocation;
+import de.unisiegen.sensortools.Location;
+import de.unisiegen.sensortools.cluster.ClusteredLocation;
+import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 import net.sf.javaml.core.Dataset;
 
 import java.util.List;

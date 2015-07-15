@@ -1,4 +1,4 @@
-package de.unisiegen.locationtools.cluster;
+package de.unisiegen.sensortools.cluster;
 
 
 

@@ -1,12 +1,13 @@
-package de.unisiegen.locationtools.cluster;
+package de.unisiegen.sensortools.cluster;
 
 
 
 
 import com.google.gson.Gson;
-import de.unisiegen.locationtools.Location;
-import de.unisiegen.locationtools.cluster.DistanceMeasures.LocationDistanceMeasure;
-import de.unisiegen.locationtools.db.DataAdapter;
+import de.unisiegen.sensortools.Location;
+import de.unisiegen.sensortools.cluster.distanceMeasures.LocationDistanceMeasure;
+import de.unisiegen.sensortools.cluster.sensors.UserLocation;
+import de.unisiegen.sensortools.db.DataAdapter;
 import net.sf.javaml.clustering.DensityBasedSpatialClustering;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.DefaultDataset;

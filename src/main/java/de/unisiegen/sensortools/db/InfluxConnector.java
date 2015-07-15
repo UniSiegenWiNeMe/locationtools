@@ -1,8 +1,8 @@
-package de.unisiegen.locationtools.db;
+package de.unisiegen.sensortools.db;
 
-import de.unisiegen.locationtools.Location;
-import de.unisiegen.locationtools.cluster.ClusteredLocation;
-import de.unisiegen.locationtools.cluster.UserLocation;
+import de.unisiegen.sensortools.Location;
+import de.unisiegen.sensortools.cluster.ClusteredLocation;
+import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 
 import net.sf.javaml.core.Dataset;
 import org.influxdb.InfluxDB;
@@ -12,13 +12,9 @@ import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.joda.time.DateTime;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * Created by lars on 08/07/15.

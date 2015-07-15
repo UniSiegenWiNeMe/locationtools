@@ -1,9 +1,8 @@
-package de.unisiegen.locationtools;
+package de.unisiegen.sensortools;
 
-import de.unisiegen.locationtools.cluster.ClusterManagement;
-import de.unisiegen.locationtools.cluster.ClusteredLocation;
-import de.unisiegen.locationtools.cluster.UserLocation;
-import de.unisiegen.locationtools.db.DataAdapter;
+import de.unisiegen.sensortools.cluster.ClusterManagement;
+import de.unisiegen.sensortools.cluster.sensors.UserLocation;
+import de.unisiegen.sensortools.db.DataAdapter;
 import net.sf.javaml.core.Dataset;
 import org.xml.sax.SAXException;
 import spark.Request;
@@ -19,7 +18,7 @@ import java.util.*;
  */
 public class TestClusterRoute implements Route {
     private ArrayList<UserLocation> ulocs;
-    private DataAdapter myAdapter = new DataAdapter() {
+    private DataAdapter myAdapter ;/*= new DataAdapter() {
         @Override
         public void openDB() {
 
@@ -101,10 +100,16 @@ public class TestClusterRoute implements Route {
         }
 
     };
+*/
 
+
+    public TestClusterRoute(DataAdapter influxConnector){
+        myAdapter = influxConnector;
+    }
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        ulocs = getFakeLocaction(request);
+        //ulocs = getFakeLocaction(request);
+
         HashMap<Location,Dataset> clusters = ClusterManagement.clusterLocations(myAdapter,new Date(0), new Date(),null,false);
         String x = "Clusters found: " + clusters.size();
         for(Location loc: clusters.keySet()){

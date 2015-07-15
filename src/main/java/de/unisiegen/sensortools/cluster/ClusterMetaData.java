@@ -1,4 +1,4 @@
-package de.unisiegen.locationtools.cluster;
+package de.unisiegen.sensortools.cluster;
 import com.google.gson.Gson;
 
 import java.util.Vector;

@@ -1,4 +1,4 @@
-package de.unisiegen.locationtools.db
+package de.unisiegen.sensortools.db
 
 /**
  * Created by lars on 09/07/15.

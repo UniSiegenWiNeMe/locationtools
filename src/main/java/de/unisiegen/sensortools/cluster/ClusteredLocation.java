@@ -1,4 +1,4 @@
-package de.unisiegen.locationtools.cluster;
+package de.unisiegen.sensortools.cluster;
 
 
 import java.io.Serializable;
@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import de.unisiegen.locationtools.Location;
+import de.unisiegen.sensortools.Location;
 
 
 

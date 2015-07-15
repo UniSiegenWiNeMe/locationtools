@@ -1,7 +1,7 @@
-package de.unisiegen.locationtools.cluster;
+package de.unisiegen.sensortools.cluster;
 
-import de.unisiegen.locationtools.Location;
-import de.unisiegen.locationtools.LocationUtils;
+import de.unisiegen.sensortools.Location;
+import de.unisiegen.sensortools.LocationUtils;
 
 import java.util.Vector;
 

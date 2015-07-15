@@ -1,7 +1,7 @@
-package de.unisiegen.locationtools;
+package de.unisiegen.sensortools;
 
-import de.unisiegen.locationtools.db.DataAdapter;
-import de.unisiegen.locationtools.db.InfluxConnector;
+import de.unisiegen.sensortools.db.DataAdapter;
+import de.unisiegen.sensortools.db.InfluxConnector;
 
 import static spark.Spark.*;
 
@@ -14,7 +14,7 @@ public class Main {
         influxDb.openDB();
         get("/hello", (req, res) -> "Hello World");
         post("/kml", new KMLRoute(influxDb));
-        post("/testFake", new TestClusterRoute());
+        post("/testFake", new TestClusterRoute(influxDb));
     }
 
 }

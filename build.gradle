@@ -7,7 +7,7 @@ apply plugin: 'java'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-mainClassName = 'de.unisiegen.locationtools.Main'
+mainClassName = 'de.unisiegen.sensortools.Main'
 
 repositories {
     mavenCentral()

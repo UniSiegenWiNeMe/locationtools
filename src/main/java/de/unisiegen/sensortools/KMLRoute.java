@@ -1,6 +1,6 @@
-package de.unisiegen.locationtools;
+package de.unisiegen.sensortools;
 
-import de.unisiegen.locationtools.db.DataAdapter;
+import de.unisiegen.sensortools.db.DataAdapter;
 import spark.Request;
 import spark.Response;
 import spark.Route;
