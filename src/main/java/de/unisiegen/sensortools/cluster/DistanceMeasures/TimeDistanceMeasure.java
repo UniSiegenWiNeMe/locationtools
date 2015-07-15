@@ -35,10 +35,14 @@ public class TimeDistanceMeasure implements DistanceMeasure {
        if(instance instanceof AbstractMeasurement && instance1 instanceof AbstractMeasurement){
            AbstractMeasurement measurement1 = (AbstractMeasurement) instance;
            AbstractMeasurement measurement2 =(AbstractMeasurement) instance1;
+<<<<<<< HEAD
            DateTime dt1 = new DateTime(measurement1.getStart());
            DateTime dt2 = new DateTime(measurement2.getStart());
 
 
+=======
+           DateTime dt1 = new DateTime();
+>>>>>>> 7e2c676c59b9572bd33a5f61e9bbf31e61f26567
 
 
 

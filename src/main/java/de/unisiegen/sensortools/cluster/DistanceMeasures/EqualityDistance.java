@@ -3,20 +3,22 @@ package de.unisiegen.sensortools.cluster.DistanceMeasures;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;
 
-/**
- * Created by Matthias Betz on 15.07.2015.
+/** A simple Yes/No Metric, suitable for all Measurements
+ * Created by lars on 15/07/15.
  */
-public class PowerDistance implements DistanceMeasure {
+public class EqualityDistance implements DistanceMeasure {
 
-    //DistanceMeasure
     @Override
     public double measure(Instance instance, Instance instance1) {
-       return instance.get(0) - instance1.get(0);
+        if (instance.equals(instance1))
+            return 1;
+        else
+            return 0;
     }
 
     @Override
     public boolean compare(double v, double v1) {
-        return false;
+        return v == v1;
     }
 
     @Override
@@ -26,6 +28,6 @@ public class PowerDistance implements DistanceMeasure {
 
     @Override
     public double getMaxValue() {
-        return 3300;
+        return 1;
     }
 }
