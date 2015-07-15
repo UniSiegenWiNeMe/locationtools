@@ -13,12 +13,12 @@ public class ContactMeasurement extends AbstractMeasurement implements Comparabl
 
     static int last_id = 0;
 
-    final static String contactIDkey "contact_ID"
+    final static String contactIDkey = "contact_ID";
 
     /** unique identifier of this contact measurement */
     private int measure_id;
 
-    synchronized public ContactMeasurement(long ts, long te, String id) {
+    public ContactMeasurement(long ts, long te, String id) {
         super();
         measure_id = last_id + 1;
         last_id++;
