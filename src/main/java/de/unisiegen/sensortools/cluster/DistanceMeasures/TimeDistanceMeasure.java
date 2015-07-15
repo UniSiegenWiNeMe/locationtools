@@ -3,6 +3,7 @@ package de.unisiegen.sensortools.cluster.distanceMeasures;
 import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;
+import org.joda.time.DateTime;
 
 /**
  * Created by Martin on 15.07.2015.
@@ -14,6 +15,8 @@ public class TimeDistanceMeasure implements DistanceMeasure {
        if(instance instanceof AbstractMeasurement && instance1 instanceof AbstractMeasurement){
            AbstractMeasurement measurement1 = (AbstractMeasurement) instance;
            AbstractMeasurement measurement2 =(AbstractMeasurement) instance1;
+           DateTime dt1 = new DateTime();
+           dt1.
 
 
 
