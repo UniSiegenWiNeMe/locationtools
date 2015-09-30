@@ -33,7 +33,7 @@ public class InfluxConnector implements DataAdapter {
         this.dbURL = dbURL;
         this.dbUser = dbUser;
         this.dbPassword = dbPassword;
-        String dbName = "locations";
+
     }
 
     public InfluxConnector(){
@@ -146,7 +146,7 @@ public class InfluxConnector implements DataAdapter {
     @Override
     public List<UserLocation> getAllHistoryLocs(String user,String namespace, long since, long until, boolean timedescending, boolean onlyUnclustered) {
         List<UserLocation> allHistoricalLocs = new ArrayList();
-        Query query = new Query("SELECT * FROM KMLLocation", dbName);
+        Query query = new Query("SELECT lat,long FROM KMLLocation", dbName);
         QueryResult queryresult = influxDB.query(query);
         for(int i = 0;i<queryresult.getResults().get(0).getSeries().get(0).getValues().size();i++) {
             allHistoricalLocs.add(new UserLocation(new Location(Location.LocationType.ADDRESS,(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)).intValue(),(int)((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(2)).intValue()),(new DateTime((String)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime(),-1));

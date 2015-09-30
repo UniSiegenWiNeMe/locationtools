@@ -19,6 +19,9 @@ public abstract class AbstractMeasurement extends DenseInstance{
         super(new double[]{});
 
     }
+    public AbstractMeasurement(double[] values){
+        super(values);
+    }
 
     public String getName(){
         return name;

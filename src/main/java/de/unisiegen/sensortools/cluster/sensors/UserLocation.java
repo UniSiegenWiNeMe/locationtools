@@ -3,9 +3,11 @@ package de.unisiegen.sensortools.cluster.sensors;
 import de.unisiegen.sensortools.Location;
 import net.sf.javaml.core.DenseInstance;
 
+import java.util.Collection;
+import java.util.Map;
 
 
-public class UserLocation extends DenseInstance implements Comparable<UserLocation>{
+public class UserLocation extends AbstractMeasurement implements Comparable<UserLocation>{
 
     private Location loc;
     private long date;
@@ -17,6 +19,7 @@ public class UserLocation extends DenseInstance implements Comparable<UserLocati
         this.loc = loc;
         this.date = date;
         this.parentCluster = parentCluster;
+        this.setStart(date);
 	}
 
 	public long getParentCluster() {
@@ -63,4 +66,23 @@ public class UserLocation extends DenseInstance implements Comparable<UserLocati
         return tmp;
     }
 
+    @Override
+    public Collection<Object> getValues() {
+        return null;
+    }
+
+    @Override
+    public Collection<Object> setValues(Collection<Object> values) {
+        return null;
+    }
+
+    @Override
+    public Map<String, String> getTags() {
+        return null;
+    }
+
+    @Override
+    public void setTags(Map<String, String> tags) {
+
+    }
 }

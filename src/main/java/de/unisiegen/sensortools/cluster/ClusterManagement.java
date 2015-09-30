@@ -6,6 +6,8 @@ package de.unisiegen.sensortools.cluster;
 import com.google.gson.Gson;
 import de.unisiegen.sensortools.Location;
 import de.unisiegen.sensortools.cluster.distanceMeasures.LocationDistanceMeasure;
+import de.unisiegen.sensortools.cluster.distanceMeasures.TimeDistanceMeasure;
+import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
 import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 import de.unisiegen.sensortools.db.DataAdapter;
 import net.sf.javaml.clustering.DensityBasedSpatialClustering;
@@ -29,7 +31,7 @@ public class ClusterManagement {
         HashMap<Location, Dataset> clusterCenters = new HashMap<Location, Dataset>();
 
 
-        List<UserLocation> locs= adapter.getAllHistoryLocs(null,null,since.getTime(),until.getTime(),true,onlyUnClustered);
+        List<UserLocation> locs= adapter.getAllHistoryLocs("lala","martinloc",since.getTime(),until.getTime(),true,onlyUnClustered);
         System.out.println( "Number of Locations available for clustering:" + locs.size());
         Dataset data = new DefaultDataset();
         if (max != null) {
@@ -88,6 +90,16 @@ public class ClusterManagement {
         return clusterLocations(adapter, since, until, max, false);
     }
 
+    public static List<AbstractMeasurement> clusterTime(Collection<AbstractMeasurement> data){
+        for(AbstractMeasurement measurement: data){
+            DefaultDataset dds = new DefaultDataset();
+            for(AbstractMeasurement instance: data){
+                dds.add(instance);
+            }
+            TimeDistanceMeasure tdm = new TimeDistanceMeasure(TimeDistanceMeasure.TimeRepetitionInterval.HOUR_OF_DAY, (1.0/60.0), 10);
+        }
+        return null;
+    }
     public static List<ClusteredLocation> getClusteredLocationsFromCache() {
         //TODO: get Clusters from Cache
         //return Utilities.openDBConnection().getAllClusterLocs();

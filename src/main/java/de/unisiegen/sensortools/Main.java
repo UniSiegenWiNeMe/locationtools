@@ -17,6 +17,7 @@ public class Main {
         get("/hello", (req, res) -> "Hello World");
         post("/kml", new KMLRoute(influxDb));
         post("/testFake", new TestClusterRoute(influxDb));
+        post("/testTime", new TestTimeRoute(influxDb));
     }
 
 }
