@@ -1,6 +1,6 @@
 package de.unisiegen.sensortools.cluster.sensors;
 
-import de.unisiegen.sensortools.cluster.DistanceMeasures.EqualityDistance;
+//import de.unisiegen.sensortools.cluster.DistanceMeasures.EqualityDistance;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -13,7 +13,7 @@ import java.util.*;
  * and a single identifier of the other entity (String)
  * Created by lars on 15/07/15.
  */
-public class ContactMeasurement extends AbstractMeasurement implements Comparable {
+public class ContactMeasurement extends AbstractMeasurement/* implements Comparable*/ {
 
     static int last_id = 0;
 
@@ -76,12 +76,14 @@ public class ContactMeasurement extends AbstractMeasurement implements Comparabl
 
     /**
      *
-     * @param o
+     * @param
      * @return
      */
+   /*
     @Override
     public int compareTo(Object other) {
         DistanceMeasure distance = new EqualityDistance();
         return (int) distance.measure(this, (Instance) other);
     }
+    */
 }
