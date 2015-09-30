@@ -18,15 +18,39 @@ public class ClusterRoute implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        String clusterBool = request.queryParams("cluster");
+        boolean clusterBool = Boolean.valueOf(request.queryParams("cluster"));
+        boolean normalizedBool = Boolean.valueOf(request.queryParams("normalized"));
+        int normalizedMethod = Integer.valueOf(request.queryParams("normalizedMethod"));
+
+        String bufferedReaders = "";
+
+        if(normalizedBool && clusterBool) {
+            switch(normalizedMethod) {
+            case(0): //Methode Rescaling
+                bufferedReaders = ""; //Norm
+                bufferedReaders = ""; //Cluster
+                bufferedReaders = ""; //Denorm
+                break;
+            case(1): //Methode Standarized
+                bufferedReaders = ""; //Norm
+                bufferedReaders = ""; //Cluster
+                bufferedReaders = ""; //Denorm
+                break;
+            default:
+                bufferedReaders = ""; //Norm
+                bufferedReaders = ""; //Cluster
+                bufferedReaders = ""; //Denorm
+                break;
+            }
+        } if(clusterBool) {
+            bufferedReaders = ""; //Cluster
+        } else {
+            bufferedReaders = ""; //Norm
+        }
+
         System.out.println("Cluster? " + clusterBool);
-
-        String normalizedBool = request.queryParams("normalized");
         System.out.println("Normalized? " + normalizedBool);
-
-        String normalizedMethod = request.queryParams("normalizedMethod");
         System.out.println("Norm. Method? " + normalizedMethod);
-
         return "Cluster";
     }
 }
