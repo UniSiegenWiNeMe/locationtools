@@ -90,15 +90,35 @@ public class ClusterManagement {
         return clusterLocations(adapter, since, until, max, false);
     }
 
-    public static List<AbstractMeasurement> clusterTime(Collection<AbstractMeasurement> data){
-        for(AbstractMeasurement measurement: data){
-            DefaultDataset dds = new DefaultDataset();
+    public static List<TimeClusterResult> clusterTime(Collection<AbstractMeasurement> data){
+        LinkedList<TimeClusterResult> result = new LinkedList<TimeClusterResult>();
+        DefaultDataset dds = new DefaultDataset();
+
             for(AbstractMeasurement instance: data){
                 dds.add(instance);
             }
-            TimeDistanceMeasure tdm = new TimeDistanceMeasure(TimeDistanceMeasure.TimeRepetitionInterval.HOUR_OF_DAY, (1.0/60.0), 10);
-        }
-        return null;
+            TimeDistanceMeasure tdm = new TimeDistanceMeasure(TimeDistanceMeasure.TimeRepetitionInterval.HOUR_OF_DAY, (30.0/60.0), 0.1);
+            int minLocs = Math.max(10, (int) (dds.size() * tdm.minClusterSize));
+            DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(tdm.maxTimeDifference,minLocs,tdm);
+            Dataset[] resultData = clusterer.cluster(dds);
+
+
+            for(int i =0; i<resultData.length; i++){
+                Dataset set = resultData[i];
+                Iterator it = set.iterator();
+                long maxTime=0;
+                long minTime= Long.MAX_VALUE;
+                LinkedList<AbstractMeasurement> resultList = new LinkedList<AbstractMeasurement>();
+                while(it.hasNext()){
+                    AbstractMeasurement absMes = (AbstractMeasurement) it.next();
+                    maxTime = Math.max(absMes.getStart(), maxTime);
+                    minTime = Math.min(absMes.getStart(), minTime);
+                    resultList.add(absMes);
+               }
+            result.add(new TimeClusterResult(new Date(minTime), new Date(maxTime), resultList));
+            }
+
+        return result;
     }
     public static List<ClusteredLocation> getClusteredLocationsFromCache() {
         //TODO: get Clusters from Cache

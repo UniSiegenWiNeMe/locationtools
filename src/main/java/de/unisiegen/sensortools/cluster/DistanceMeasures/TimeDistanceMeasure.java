@@ -13,8 +13,8 @@ public class TimeDistanceMeasure implements DistanceMeasure {
     private TimeRepetitionInterval interval;
     private DateTimeFieldType intervalType;
     private double maxValue;
-    private double maxTimeDifference;
-    private int minClusterSize;
+    public double maxTimeDifference;
+    public double minClusterSize;
 
 
     public enum TimeRepetitionInterval{
@@ -24,7 +24,7 @@ public class TimeDistanceMeasure implements DistanceMeasure {
         DAY_OF_WEEK
 
     }
-    public TimeDistanceMeasure(TimeRepetitionInterval type, double maxTimeDifference, int minClusterSize ){
+    public TimeDistanceMeasure(TimeRepetitionInterval type, double maxTimeDifference, double minClusterSizeFactor ){
         this.interval = type;
         this.maxTimeDifference = maxTimeDifference;
         this.minClusterSize = minClusterSize;

@@ -1,6 +1,7 @@
 package de.unisiegen.sensortools;
 
 import de.unisiegen.sensortools.cluster.ClusterManagement;
+import de.unisiegen.sensortools.cluster.TimeClusterResult;
 import de.unisiegen.sensortools.cluster.distanceMeasures.PowerDistance;
 import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
 import de.unisiegen.sensortools.cluster.sensors.PowerMeasurement;
@@ -37,14 +38,25 @@ public class TestTimeRoute implements Route {
         //ulocs = getFakeLocaction(request);
 
         HashMap<Location,Dataset> clusters = ClusterManagement.clusterLocations(myAdapter,new Date(0), new Date(),null,false);
-        String x = "Clusters found: " + clusters.size();
+        String resultString = "Clusters found: " + clusters.size();
         for(Location loc: clusters.keySet()){
-            x+="\n"+loc.lat+ " "+ loc.lon + " Location belonging to cluster:" + clusters.get(loc).size();
-            x+="\nhttp://maps.google.com/?ie=UTF8&hq=&ll="+((double)loc.lat)/1000000 +","+((double)loc.lon)/1000000+"&z=13";
+            resultString+="\n"+loc.lat+ " "+ loc.lon + " Location belonging to cluster:" + clusters.get(loc).size();
+            resultString+="\nhttp://maps.google.com/?ie=UTF8&hq=&ll="+((double)loc.lat)/1000000 +","+((double)loc.lon)/1000000+"&z=13";
         }
+        Dataset data = clusters.get(clusters.keySet().iterator().next());
+            LinkedList<AbstractMeasurement> list = new LinkedList<AbstractMeasurement>();
+            for(Instance instance:data){
+                AbstractMeasurement am = (AbstractMeasurement)instance;
+                list.add(am);
+            }
+            resultString+="\n\n";
+            List<TimeClusterResult> timeresults = ClusterManagement.clusterTime(list);
+            for(TimeClusterResult tcr:timeresults){
+                resultString+= "Start at: " + tcr.start.toLocaleString() + "End at: "+ tcr.end.toLocaleString()+ "\n";
+            }
 
 
-        return x;
+        return resultString;
     }
 
     private ArrayList<UserLocation> getFakeLocaction(Request request){
