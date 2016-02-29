@@ -31,23 +31,23 @@ public class ContactMeasurement extends AbstractMeasurement/* implements Compara
         setValue(contactIDkey, id);
     }
 
-    @Override
+
     public Collection<Object> getValues() {
-        return new ArrayList<>(this.tags.values());
+        return new ArrayList<>(this.values.values());
     }
 
-    @Override
+
     public Collection<Object> setValues(Collection<Object> values) {
         throw new NotImplementedException();
     }
 
 
-    @Override
+
     public Map<String, String> getTags() {
-        return new HashMap<String,String>(this.tags);
+        return new HashMap<String,String>(this.values);
     }
 
-    @Override
+
     public void setTags(Map<String, String> tags) {
         Iterator<String> keys = tags.keySet().iterator();
         while(keys.hasNext()) {

@@ -19,6 +19,7 @@ public class Main {
         post("/cluster", new ClusterRoute());
         post("/testFake", new TestClusterRoute(influxDb));
         post("/testTime", new TestTimeRoute(influxDb));
+        get("/testPatterns", new TestEventPatternRoute());
     }
 
 }

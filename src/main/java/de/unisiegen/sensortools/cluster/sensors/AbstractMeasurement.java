@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public abstract class AbstractMeasurement extends DenseInstance{
     public  String name;
-    public  Map<String, String> tags;
+    public  Map<String, String> values;
     public  long start;
     public  long end;
 
@@ -49,7 +49,7 @@ public abstract class AbstractMeasurement extends DenseInstance{
      * @return
      */
     public String getValue(String key) {
-        return tags.get(key);
+        return values.get(key);
     }
 
     /** Default setter of key-value pair, Just add water.
@@ -58,7 +58,7 @@ public abstract class AbstractMeasurement extends DenseInstance{
      * @param value
      */
     public void setValue(String key, String value) {
-        tags.put(key,value);
+        values.put(key, value);
     }
 
     /** Default deletion function for internal store. Returns the contained value.
@@ -68,14 +68,11 @@ public abstract class AbstractMeasurement extends DenseInstance{
      * @return
      */
     public String removeValue(String key){
-        String val = tags.get(key);
-        tags.remove(key);
+        String val = values.get(key);
+        values.remove(key);
         return val;
     }
 
-    public abstract Collection<Object> getValues();
-    public abstract Collection<Object> setValues(Collection<Object> values);
-    public abstract Map<String, String> getTags();
-    public abstract void setTags(Map<String, String> tags);
+
 
 }

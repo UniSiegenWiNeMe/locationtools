@@ -66,23 +66,6 @@ public class UserLocation extends AbstractMeasurement implements Comparable<User
         return tmp;
     }
 
-    @Override
-    public Collection<Object> getValues() {
-        return null;
-    }
 
-    @Override
-    public Collection<Object> setValues(Collection<Object> values) {
-        return null;
-    }
-
-    @Override
-    public Map<String, String> getTags() {
-        return null;
-    }
-
-    @Override
-    public void setTags(Map<String, String> tags) {
-
-    }
+    
 }

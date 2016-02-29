@@ -4,20 +4,31 @@ package de.unisiegen.sensortools.cluster;
 
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import de.unisiegen.sensortools.Location;
 import de.unisiegen.sensortools.cluster.distanceMeasures.LocationDistanceMeasure;
+import de.unisiegen.sensortools.cluster.distanceMeasures.SHEventDistanceMeasure;
 import de.unisiegen.sensortools.cluster.distanceMeasures.TimeDistanceMeasure;
 import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
+import de.unisiegen.sensortools.cluster.sensors.SHSensorEvent;
 import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 import de.unisiegen.sensortools.db.DataAdapter;
 import net.sf.javaml.clustering.DensityBasedSpatialClustering;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.DefaultDataset;
 import net.sf.javaml.core.Instance;
+import org.json.HTTP;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
-
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.util.*;
+import java.net.URL;
 
 /**
  * Created by Martin on 05.03.2015.
@@ -90,8 +101,8 @@ public class ClusterManagement {
         return clusterLocations(adapter, since, until, max, false);
     }
 
-    public static List<TimeClusterResult> clusterTime(Collection<AbstractMeasurement> data){
-        LinkedList<TimeClusterResult> result = new LinkedList<TimeClusterResult>();
+    public static List<ClusterResult> clusterTime(Collection<AbstractMeasurement> data){
+        LinkedList<ClusterResult> result = new LinkedList<ClusterResult>();
         DefaultDataset dds = new DefaultDataset();
 
             for(AbstractMeasurement instance: data){
@@ -115,11 +126,82 @@ public class ClusterManagement {
                     minTime = Math.min(absMes.getStart(), minTime);
                     resultList.add(absMes);
                }
-            result.add(new TimeClusterResult(new Date(minTime), new Date(maxTime), resultList));
+            result.add(new ClusterResult(new Date(minTime), new Date(maxTime), resultList));
             }
 
         return result;
     }
+
+    public static List<ClusterResult> clusterPatterns(String asd){
+        JSONArray requestResult= null;
+        HttpURLConnection connection = null;
+        try {
+            //Create connection
+
+            URL url = new URL(asd);
+            connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type",
+                    "application/json");
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+            System.out.println(connection.getResponseCode());
+
+
+            //Get Response
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            StringBuilder response = new StringBuilder(); // or StringBuffer if not Java 5+
+            String line;
+            while((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            requestResult = new JSONArray(response.toString()) ;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if(connection != null) {
+                connection.disconnect();
+            }
+        }
+        DefaultDataset dds = new DefaultDataset();
+        ArrayList<SHSensorEvent> events = new ArrayList<SHSensorEvent>();
+        for(int i =0; i<requestResult.length(); i++){
+            SHSensorEvent event =SHSensorEvent.fromJSON(requestResult.getJSONObject(i).toString());
+            dds.add(event);
+            events.add(event);
+        }
+
+        LinkedList<ClusterResult> result = new LinkedList<ClusterResult>();
+
+        SHEventDistanceMeasure shedm = new SHEventDistanceMeasure(events);
+        DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(1000l*3600l*24l,2,shedm);
+        Dataset[] resultData = clusterer.cluster(dds);
+
+
+        for(int i =0; i<resultData.length; i++){
+            Dataset set = resultData[i];
+            Iterator it = set.iterator();
+            long maxTime=0;
+            long minTime= Long.MAX_VALUE;
+            LinkedList<AbstractMeasurement> resultList = new LinkedList<AbstractMeasurement>();
+            while(it.hasNext()){
+                AbstractMeasurement absMes = (AbstractMeasurement) it.next();
+                maxTime = Math.max(absMes.getStart(), maxTime);
+                minTime = Math.min(absMes.getStart(), minTime);
+                resultList.add(absMes);
+            }
+            result.add(new ClusterResult(new Date(minTime), new Date(maxTime), resultList));
+        }
+
+        return result;
+    }
+
+
+
     public static List<ClusteredLocation> getClusteredLocationsFromCache() {
         //TODO: get Clusters from Cache
         //return Utilities.openDBConnection().getAllClusterLocs();

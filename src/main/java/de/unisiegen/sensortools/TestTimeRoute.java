@@ -1,17 +1,12 @@
 package de.unisiegen.sensortools;
 
 import de.unisiegen.sensortools.cluster.ClusterManagement;
-import de.unisiegen.sensortools.cluster.TimeClusterResult;
-import de.unisiegen.sensortools.cluster.distanceMeasures.PowerDistance;
+import de.unisiegen.sensortools.cluster.ClusterResult;
 import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
-import de.unisiegen.sensortools.cluster.sensors.PowerMeasurement;
 import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 import de.unisiegen.sensortools.db.DataAdapter;
-import net.sf.javaml.clustering.DensityBasedSpatialClustering;
 import net.sf.javaml.core.Dataset;
-import net.sf.javaml.core.DefaultDataset;
 import net.sf.javaml.core.Instance;
-import org.eclipse.jetty.server.Authentication;
 import org.xml.sax.SAXException;
 import spark.Request;
 import spark.Response;
@@ -50,8 +45,8 @@ public class TestTimeRoute implements Route {
                 list.add(am);
             }
             resultString+="\n\n";
-            List<TimeClusterResult> timeresults = ClusterManagement.clusterTime(list);
-            for(TimeClusterResult tcr:timeresults){
+            List<ClusterResult> timeresults = ClusterManagement.clusterTime(list);
+            for(ClusterResult tcr:timeresults){
                 resultString+= "Start at: " + tcr.start.toLocaleString() + "End at: "+ tcr.end.toLocaleString()+ "\n";
             }
 

@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * Created by Martin on 30.09.2015.
  */
-public class TimeClusterResult {
+public class ClusterResult {
     public Date start;
     public Date end;
     public List<AbstractMeasurement>data;
 
-    public TimeClusterResult(Date start, Date end, List<AbstractMeasurement> data){
+    public ClusterResult(Date start, Date end, List<AbstractMeasurement> data){
         this.start = start;
         this.end = end;
         this.data = data;

@@ -12,25 +12,6 @@ public class PowerMeasurement extends AbstractMeasurement implements Comparable 
         super();
     }
 
-    @Override
-    public Collection<Object> getValues() {
-        return null;
-    }
-
-    @Override
-    public Collection<Object> setValues(Collection<Object> values) {
-        return null;
-    }
-
-    @Override
-    public Map<String, String> getTags() {
-        return null;
-    }
-
-    @Override
-    public void setTags(Map<String, String> tags) {
-
-    }
 
     @Override
     public int compareTo(Object o) {

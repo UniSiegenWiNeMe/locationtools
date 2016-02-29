@@ -169,7 +169,7 @@ public class InfluxConnector implements DataAdapter {
             PowerMeasurement currentPowMes = new PowerMeasurement();
             ArrayList<Object> list = new ArrayList<>();
             list.add(((Double) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)));
-            currentPowMes.setValues(list);
+            //currentPowMes.setValues(list);
             currentPowMes.setStart((new DateTime((String) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime());
             currentPowMes.setEnd((new DateTime((String) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime());
             allHistoricalCon.add(currentPowMes);
