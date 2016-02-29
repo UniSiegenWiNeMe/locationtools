@@ -3,6 +3,7 @@ package de.unisiegen.sensortools;
 import de.unisiegen.sensortools.cluster.ClusterManagement;
 import de.unisiegen.sensortools.cluster.ClusterResult;
 import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
+import de.unisiegen.sensortools.cluster.sensors.SHSensorEvent;
 import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 import de.unisiegen.sensortools.db.DataAdapter;
 import net.sf.javaml.core.Dataset;
@@ -31,7 +32,15 @@ public class TestEventPatternRoute implements Route {
         String url = request.queryParams("source");
         System.out.println(url);
         List<ClusterResult> cluster = ClusterManagement.clusterPatterns(url);
-        return cluster;
+        String resultString="";
+        for(ClusterResult tcr:cluster){
+            resultString+= "Start at: " + tcr.start.toLocaleString() + "End at: "+ tcr.end.toLocaleString()+ "\n";
+            for(AbstractMeasurement mesurement:tcr.data){
+                SHSensorEvent se = (SHSensorEvent) mesurement;
+                resultString +="\n"+se.getSUID() + " " + " "+ se.getName() + se.getValue();
+            }
+        }
+        return resultString;
     }
 
 

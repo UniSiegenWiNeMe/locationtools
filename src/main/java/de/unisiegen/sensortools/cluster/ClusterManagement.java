@@ -178,7 +178,7 @@ public class ClusterManagement {
         LinkedList<ClusterResult> result = new LinkedList<ClusterResult>();
 
         SHEventDistanceMeasure shedm = new SHEventDistanceMeasure(events);
-        DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(1000l*3600l*24l,2,shedm);
+        DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(SHEventDistanceMeasure.INTER_DAY_PATTERNS,shedm.getSuggestedRepetitionCriteria(SHEventDistanceMeasure.INTER_DAY_PATTERNS),shedm);
         Dataset[] resultData = clusterer.cluster(dds);
 
 

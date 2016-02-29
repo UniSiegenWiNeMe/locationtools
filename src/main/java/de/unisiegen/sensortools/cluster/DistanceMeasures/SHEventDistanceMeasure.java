@@ -50,9 +50,9 @@ public class SHEventDistanceMeasure implements DistanceMeasure {
                 return (int)(((lastEventTime-firstEventTime)/(1000l*60l*60l*24l))*0.03);
             }
             case INTRA_DAY_PATTERNS:{
-                return (int)(((lastEventTime-firstEventTime)/(1000l*60l*60l*24l))*0.1);
+                return (int)(((lastEventTime-firstEventTime)/(1000l*60l*60l*24l))*0.8);
             }
-            default: return (int)(((lastEventTime-firstEventTime)/(1000l*60l*60l*24l))*0.03);
+            default: return (int)(((lastEventTime-firstEventTime)/(1000l*60l*60l*24l))*0.3);
 
         }
 
@@ -62,7 +62,14 @@ public class SHEventDistanceMeasure implements DistanceMeasure {
         if(instance instanceof SHSensorEvent &&instance1 instanceof SHSensorEvent ){
             SHSensorEvent event1 = (SHSensorEvent) instance;
             SHSensorEvent event2 = (SHSensorEvent) instance1;
-            return getClosestValueForType(referenceValues.get(event2.getSUID()), event1.getStart());
+            if(event1.getSUID().equals(event2.getSUID())){
+                return Math.abs(event1.getStart()-event2.getStart());
+            }else{
+                double res =getClosestValueForType(referenceValues.get(event2.getSUID()), event1.getStart());
+                double distance = Math.abs(event1.getStart() - res);
+                return distance;
+            }
+
 
         }else{
             throw new IllegalArgumentException("Instance needs to be SHSensorEvent");
