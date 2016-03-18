@@ -22,11 +22,11 @@ import java.util.concurrent.TimeUnit;
  * Created by lars on 08/07/15.
  */
 public class InfluxConnector implements DataAdapter {
-    private String dbURL="http://141.99.14.50:8086";
+    private String dbURL="http://rambo:8086";
     private String dbUser = "root";
     private String dbPassword = "root";
     private InfluxDB influxDB;
-    private String dbName = "locations";
+    private String dbName = "energy";
 
 
     public InfluxConnector(String dbURL, String dbUser, String dbPassword) {
@@ -162,18 +162,19 @@ public class InfluxConnector implements DataAdapter {
     @Override
     public List<PowerMeasurement> getHistoryConsumption(String user, String namespace, String type, long from, long to) {
         List<PowerMeasurement> allHistoricalCon = new ArrayList();
-        Query query = new Query("SELECT * FROM power WHERE device='"+type+"' AND time>now() - 2000m AND time < now()", dbName);
+        Query query = new Query("SELECT * FROM plugwise WHERE time>now()- 25m  AND time < now()", dbName);
         QueryResult queryresult = influxDB.query(query);
+        System.out.println("Results found" + queryresult.toString().length());
         for(int i = 0;i<queryresult.getResults().get(0).getSeries().get(0).getValues().size();i++) {
             //allHistoricalCon.add(new AbstractMeasurement();
             PowerMeasurement currentPowMes = new PowerMeasurement();
-            ArrayList<Object> list = new ArrayList<>();
-            list.add(((Double) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)));
+
+            currentPowMes.setValue("POWER", "" + ((Double) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(2)));
             //currentPowMes.setValues(list);
             currentPowMes.setStart((new DateTime((String) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime());
             currentPowMes.setEnd((new DateTime((String) queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(0))).toDate().getTime());
             allHistoricalCon.add(currentPowMes);
-            //System.out.println(((Double)queryresult.getResults().get(0).getSeries().get(0).getValues().get(i).get(1)).doubleValue());
+            System.out.println(currentPowMes.getValue("POWER"));
         }
         return allHistoricalCon;
     }

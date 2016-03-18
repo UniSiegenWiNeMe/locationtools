@@ -4,6 +4,7 @@ import net.sf.javaml.core.AbstractInstance;
 import net.sf.javaml.core.DenseInstance;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,7 +18,7 @@ public abstract class AbstractMeasurement extends DenseInstance{
 
     public AbstractMeasurement() {
         super(new double[]{});
-
+        values = new HashMap<>();
     }
     public AbstractMeasurement(double[] values){
         super(values);

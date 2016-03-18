@@ -7,9 +7,11 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import de.unisiegen.sensortools.Location;
 import de.unisiegen.sensortools.cluster.distanceMeasures.LocationDistanceMeasure;
+import de.unisiegen.sensortools.cluster.distanceMeasures.PowerDistance;
 import de.unisiegen.sensortools.cluster.distanceMeasures.SHEventDistanceMeasure;
 import de.unisiegen.sensortools.cluster.distanceMeasures.TimeDistanceMeasure;
 import de.unisiegen.sensortools.cluster.sensors.AbstractMeasurement;
+import de.unisiegen.sensortools.cluster.sensors.PowerMeasurement;
 import de.unisiegen.sensortools.cluster.sensors.SHSensorEvent;
 import de.unisiegen.sensortools.cluster.sensors.UserLocation;
 import de.unisiegen.sensortools.db.DataAdapter;
@@ -200,7 +202,37 @@ public class ClusterManagement {
         return result;
     }
 
+    public static List<ClusterResult> clusterEnergy(DataAdapter dataAdapter){
+        ArrayList<ClusterResult> results = new ArrayList<ClusterResult>();
+        List<PowerMeasurement> data = dataAdapter.getHistoryConsumption("","","",0l,0l);
+        Dataset dataSet = new DefaultDataset();
+        for(PowerMeasurement pm:data){
+            dataSet.add(pm);
+        }
+        DensityBasedSpatialClustering clusterer = new DensityBasedSpatialClustering(10,5,new PowerDistance(new PowerDistance.StatusUpdater() {
+            @Override
+            public void onUpdate(int measurementCount) {
+                System.out.println("Measerument " + measurementCount +" with Dataset Size "+dataSet.size() + "("+(measurementCount/(dataSet.size()*dataSet.size()))+"%)");
+            }
+        }));
 
+        Dataset[] result =  clusterer.cluster(dataSet);
+        for(int i=0; i<result.length; i++){
+            long start = Long.MAX_VALUE;
+            long end = 0l;
+
+            ArrayList<AbstractMeasurement> measurements = new ArrayList<AbstractMeasurement>();
+            for(int j=0; j<result[i].size(); j++){
+                PowerMeasurement pmCurrent = (PowerMeasurement)result[i].get(j);
+                start = Math.min(start, pmCurrent.getStart());
+                end = Math.max(end,pmCurrent.getStart());
+
+                measurements.add(pmCurrent);
+            }
+            results.add(new ClusterResult(new Date(start),new Date(end),measurements));
+        }
+    return results;
+    }
 
     public static List<ClusteredLocation> getClusteredLocationsFromCache() {
         //TODO: get Clusters from Cache

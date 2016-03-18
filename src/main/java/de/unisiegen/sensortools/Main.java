@@ -20,6 +20,7 @@ public class Main {
         post("/testFake", new TestClusterRoute(influxDb));
         post("/testTime", new TestTimeRoute(influxDb));
         get("/testPatterns", new TestEventPatternRoute());
+        get("/testEnergy", new TestEventEnergyRoute());
     }
 
 }
